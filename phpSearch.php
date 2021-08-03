@@ -1,6 +1,7 @@
 <?php
 
 $search = $_POST['search'];
+$column = $_POST['column'];
 
 $servername = 'localhost';
 $username = 'root';
