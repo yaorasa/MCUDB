@@ -12,7 +12,7 @@ $column = $_POST['column'];
 
 
 if (isset($_POST["import"])) {
-    
+
     $fileName = $_FILES["file"]["tmp_name"];
 
     if ($_FILES["file"]["size"] > 0) {
@@ -62,43 +62,44 @@ if (isset($_POST["import"])) {
                 $date_reported = mysqli_real_escape_string($conn, $column[9]);
             }
 
-            
 
-            if($trap_name != null){$sqlUpdate = "UPDATE ClintonValley SET trap_line = ?,tunnel_types= ?,internal_baffels= ?,
+
+            if ($trap_name != null) {
+                $sqlUpdate = "UPDATE ClintonValley SET trap_line = ?,tunnel_types= ?,internal_baffels= ?,
             trap_types = ?,trap_types2 = ?,lid_securitys= ?,box_condition= ?,note=?,date_reported= ? Where trap_name = ?";
-            $paramType = "ssssssssss";
-            $paramArray = array(
-                $trap_line,
-                $tunnel_types,
-                $internal_baffels,
-                $trap_types,
-                $trap_types2,
-                $lid_securitys,
-                $box_condition,
-                $note,
-                $date_reported,
-                $trap_name
-            );
-            $insertId = $db->update($sqlUpdate, $paramType, $paramArray);
-        } else {
-            $sqlInsert = "INSERT into ClintonValley (trap_line,trap_name,tunnel_types,internal_baffels,
+                $paramType = "ssssssssss";
+                $paramArray = array(
+                    $trap_line,
+                    $tunnel_types,
+                    $internal_baffels,
+                    $trap_types,
+                    $trap_types2,
+                    $lid_securitys,
+                    $box_condition,
+                    $note,
+                    $date_reported,
+                    $trap_name
+                );
+                $insertId = $db->update($sqlUpdate, $paramType, $paramArray);
+            } else {
+                $sqlInsert = "INSERT into ClintonValley (trap_line,trap_name,tunnel_types,internal_baffels,
             trap_types,trap_types2,lid_securitys,box_condition,note,date_reported)
                    values (?,?,?,?,?,?,?,?,?,?)";
-            $paramType = "ssssssssss";
-            $paramArray = array(
-                $trap_line,
-                $trap_name,
-                $tunnel_types,
-                $internal_baffels,
-                $trap_types,
-                $trap_types2,
-                $lid_securitys,
-                $box_condition,
-                $note,
-                $date_reported
-            );
-            $insertId = $db->insert($sqlInsert, $paramType, $paramArray);
-        }
+                $paramType = "ssssssssss";
+                $paramArray = array(
+                    $trap_line,
+                    $trap_name,
+                    $tunnel_types,
+                    $internal_baffels,
+                    $trap_types,
+                    $trap_types2,
+                    $lid_securitys,
+                    $box_condition,
+                    $note,
+                    $date_reported
+                );
+                $insertId = $db->insert($sqlInsert, $paramType, $paramArray);
+            }
 
 
             if (!empty($insertId)) {
@@ -107,7 +108,6 @@ if (isset($_POST["import"])) {
             } else {
                 $type = "error";
                 $message = "Problem in Importing CSV Data";
-                
             }
         }
     }
@@ -118,109 +118,109 @@ if (isset($_POST["import"])) {
 
 <head>
     <script src="jquery-3.2.1.min.js"></script>
-    
+
 </head>
 
-    <style>
-        body {
-            font-family: Arial;
-            width: 95%;
-        }
+<style>
+    body {
+        font-family: Arial;
+        width: 95%;
+    }
 
-        .outer-scontainer {
-            background: #F0F0F0;
-            border: #e0dfdf 1px solid;
-            padding: 20px;
-            border-radius: 2px;
-        }
+    .outer-scontainer {
+        background: #F0F0F0;
+        border: #e0dfdf 1px solid;
+        padding: 20px;
+        border-radius: 2px;
+    }
 
-        .input-row {
-            margin-top: 0px;
-            margin-bottom: 20px;
-        }
+    .input-row {
+        margin-top: 0px;
+        margin-bottom: 20px;
+    }
 
-        .btn-submit {
-            background: white;
-            border: #EF8D21 1px solid;
-            color: #333;
-            font-size: 0.9em;
-            width: 100px;
-            border-radius: 2px;
-            cursor: pointer;
-        }
+    .btn-submit {
+        background: white;
+        border: #EF8D21 1px solid;
+        color: #333;
+        font-size: 0.9em;
+        width: 100px;
+        border-radius: 2px;
+        cursor: pointer;
+    }
 
-        .btn-search {
-            background: #EF8D21;
-            border: #CC6600 1px solid;
-            color: black;
-            font-size: 0.9em;
-            width: 100px;
-            border-radius: 2px;
-            cursor: pointer;
-        }
+    .btn-search {
+        background: #EF8D21;
+        border: #CC6600 1px solid;
+        color: black;
+        font-size: 0.9em;
+        width: 100px;
+        border-radius: 2px;
+        cursor: pointer;
+    }
 
-        .outer-scontainer table {
-            border-collapse: collapse;
-            width: 100%;
-        }
+    .outer-scontainer table {
+        border-collapse: collapse;
+        width: 100%;
+    }
 
-        .outer-scontainer th {
-            border: 1px solid #dddddd;
-            padding: 8px;
-            text-align: left;
-        }
+    .outer-scontainer th {
+        border: 1px solid #dddddd;
+        padding: 8px;
+        text-align: left;
+    }
 
-        .outer-scontainer td {
-            border: 1px solid #dddddd;
-            padding: 8px;
-            text-align: left;
-        }
+    .outer-scontainer td {
+        border: 1px solid #dddddd;
+        padding: 8px;
+        text-align: left;
+    }
 
-        #response {
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 2px;
-            display: none;
-        }
+    #response {
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 2px;
+        display: none;
+    }
 
-        .success {
-            background: #c7efd9;
-            border: #bbe2cd 1px solid;
-        }
+    .success {
+        background: #c7efd9;
+        border: #bbe2cd 1px solid;
+    }
 
-        .error {
-            background: #fbcfcf;
-            border: #f3c6c7 1px solid;
-        }
+    .error {
+        background: #fbcfcf;
+        border: #f3c6c7 1px solid;
+    }
 
-        div#response.display-block {
-            display: block;
-        }
-    </style>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $("#frmCSVImport").on("submit", function() {
+    div#response.display-block {
+        display: block;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#frmCSVImport").on("submit", function() {
 
-                $("#response").attr("class", "");
-                $("#response").html("");
-                var fileType = ".csv";
-                var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(" + fileType + ")$");
-                if (!regex.test($("#file").val().toLowerCase())) {
-                    $("#response").addClass("error");
-                    $("#response").addClass("display-block");
-                    $("#response").html("Invalid File. Upload : <b>" + fileType + "</b> Files.");
-                    return false;
-                }
-                return true;
-            });
+            $("#response").attr("class", "");
+            $("#response").html("");
+            var fileType = ".csv";
+            var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(" + fileType + ")$");
+            if (!regex.test($("#file").val().toLowerCase())) {
+                $("#response").addClass("error");
+                $("#response").addClass("display-block");
+                $("#response").html("Invalid File. Upload : <b>" + fileType + "</b> Files.");
+                return false;
+            }
+            return true;
         });
-    </script>
+    });
+</script>
 
-    
+
 
 <body>
     <h2>MCU traps in Clinton Valley</h2>
- 
+
     <div id="response" class="<?php if (!empty($type)) {
                                     echo $type . " display-block";
                                 } ?>">
@@ -326,8 +326,11 @@ if (isset($_POST["import"])) {
 
         ?>
     </div>
+    <!-- import table filter js -->
+    <script src="tablefilter/tablefilter.js"></script>
+
     <!-- script to deal with table filter -->
-    <script>
+    <!-- <script>
 var filtersConfig = {
         base_path: 'tablefilter/',
         paging: {
@@ -354,6 +357,13 @@ var filtersConfig = {
         col_0: 'select',
         col_1: 'select',
         col_2: 'select',
+        col_3: 'select',
+        col_4: 'select',
+        col_5: 'select',
+        col_6: 'select',
+        col_7: 'select',
+        col_8: 'select',
+        col_9: 'select',
         col_types: [
             'string', 'string', 'string',
             'string', 'string', 'string',
@@ -365,9 +375,51 @@ var filtersConfig = {
     };
     var tf = new TableFilter('userTable', filtersConfig);
     tf.init();
-</script>
-<!-- import table filter js -->
-<script src="/tablefilter/tablefilter.js"></script>
+</script> -->
+
+    <!-- starter filter -->
+    <script data-config>
+        var filtersConfig = {
+            base_path: 'tablefilter/',
+            col_0: 'select',
+            col_1: 'select',
+            col_2: 'select',
+            col_3: 'select',
+            col_4: 'select',
+            // col_5: 'select',
+            col_6: 'select',
+            col_7: 'select',
+            // col_8: 'select',
+            // col_9: 'select',
+            alternate_rows: true,
+            rows_counter: true,
+            btn_reset: true,
+            loader: true,
+            status_bar: true,
+            mark_active_columns: true,
+            highlight_keywords: true,
+
+            col_types: [
+                'string', 'string', 'string',
+                'string', 'string', 'string',
+                'string', 'string', 'string', 'string'
+            ],
+            col_widths: [
+                '150px', '100px', '100px',
+                '200px', '100px', '100px',
+                '150px', '60px', '60px', '60px'
+            ],
+            extensions: [{
+                name: 'sort'
+            }]
+        };
+
+        var tf = new TableFilter('userTable', filtersConfig);
+        tf.init();
+    </script>
+
+    <pre></pre>
+
 </body>
 
 </html>
