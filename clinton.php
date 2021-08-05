@@ -118,8 +118,7 @@ if (isset($_POST["import"])) {
 
 <head>
     <script src="jquery-3.2.1.min.js"></script>
-    <!-- import table filter js -->
-    <script src="/tablefilter/tablefilter.js"></script>
+    
 </head>
 
     <style>
@@ -329,11 +328,46 @@ if (isset($_POST["import"])) {
     </div>
     <!-- script to deal with table filter -->
     <script>
-var tf = new TableFilter(document.querySelector('#userTable'), {
-    base_path: '/tablefilter'
-});
-tf.init();
+var filtersConfig = {
+        base_path: 'tablefilter/',
+        paging: {
+          results_per_page: ['Records: ', [10, 25, 50, 100]]
+        },
+        state: {
+          types: ['local_storage'],
+          filters: true,
+          page_number: true,
+          page_length: true,
+          sort: true
+        },
+        alternate_rows: true,
+        btn_reset: true,
+        rows_counter: true,
+        loader: {
+          html: '<div id="lblMsg"></div>',
+          css_class: 'myLoader'
+        },
+        status_bar: {
+          target_id: 'lblMsg',
+          css_class: 'myStatus'
+        },
+        col_0: 'select',
+        col_1: 'select',
+        col_2: 'select',
+        col_types: [
+            'string', 'string', 'string',
+            'string', 'string', 'string',
+            'string', 'string', 'string','string'
+        ],
+        extensions:[{
+            name: 'sort'
+        }]
+    };
+    var tf = new TableFilter('userTable', filtersConfig);
+    tf.init();
 </script>
+<!-- import table filter js -->
+<script src="/tablefilter/tablefilter.js"></script>
 </body>
 
 </html>
