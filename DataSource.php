@@ -111,6 +111,19 @@ class DataSource
         return $insertId;
     }
 
+    public function update($query, $paramType, $paramArray)
+    {
+        $stmt = $this->conn->prepare($query);
+        $this->bindQueryParams($stmt, $paramType, $paramArray);
+        
+        $rc = $stmt->execute();
+        if ( false===$rc )
+            return;
+        else
+            return 1;
+    }
+
+
     /**
      * To execute query
      *

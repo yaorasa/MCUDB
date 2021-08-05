@@ -8,9 +8,11 @@ $conn = $db->getConnection();
 //get the keyword and column name from the second form
 $search = $_POST['search'];
 $column = $_POST['column'];
+// $reset = $_POST['reset'];
+
 
 if (isset($_POST["import"])) {
-
+    
     $fileName = $_FILES["file"]["tmp_name"];
 
     if ($_FILES["file"]["size"] > 0) {
@@ -60,6 +62,25 @@ if (isset($_POST["import"])) {
                 $date_reported = mysqli_real_escape_string($conn, $column[9]);
             }
 
+            
+
+            if($trap_name != null){$sqlUpdate = "UPDATE ClintonValley SET trap_line = ?,tunnel_types= ?,internal_baffels= ?,
+            trap_types = ?,trap_types2 = ?,lid_securitys= ?,box_condition= ?,note=?,date_reported= ? Where trap_name = ?";
+            $paramType = "ssssssssss";
+            $paramArray = array(
+                $trap_line,
+                $tunnel_types,
+                $internal_baffels,
+                $trap_types,
+                $trap_types2,
+                $lid_securitys,
+                $box_condition,
+                $note,
+                $date_reported,
+                $trap_name
+            );
+            $insertId = $db->update($sqlUpdate, $paramType, $paramArray);
+        } else {
             $sqlInsert = "INSERT into ClintonValley (trap_line,trap_name,tunnel_types,internal_baffels,
             trap_types,trap_types2,lid_securitys,box_condition,note,date_reported)
                    values (?,?,?,?,?,?,?,?,?,?)";
@@ -77,6 +98,8 @@ if (isset($_POST["import"])) {
                 $date_reported
             );
             $insertId = $db->insert($sqlInsert, $paramType, $paramArray);
+        }
+
 
             if (!empty($insertId)) {
                 $type = "success";
@@ -84,6 +107,7 @@ if (isset($_POST["import"])) {
             } else {
                 $type = "error";
                 $message = "Problem in Importing CSV Data";
+                
             }
         }
     }
@@ -94,6 +118,9 @@ if (isset($_POST["import"])) {
 
 <head>
     <script src="jquery-3.2.1.min.js"></script>
+    <!-- import table filter js -->
+    <script src="/tablefilter/tablefilter.js"></script>
+</head>
 
     <style>
         body {
@@ -114,7 +141,7 @@ if (isset($_POST["import"])) {
         }
 
         .btn-submit {
-            background: #eee;
+            background: white;
             border: #EF8D21 1px solid;
             color: #333;
             font-size: 0.9em;
@@ -189,11 +216,12 @@ if (isset($_POST["import"])) {
             });
         });
     </script>
-</head>
+
+    
 
 <body>
     <h2>MCU traps in Clinton Valley</h2>
-
+ 
     <div id="response" class="<?php if (!empty($type)) {
                                     echo $type . " display-block";
                                 } ?>">
@@ -232,6 +260,7 @@ if (isset($_POST["import"])) {
                     <option value="date_reported">Date reported</option>
                 </select>
                 <button type="submit" id="btnsearch" name="btnsearch" class="btn-search">Search</button>
+                <button type="submit" value="" id="btnreset" name="btnreset" class="btn-submit">See All</button>
             </form>
 
         </div>
@@ -298,7 +327,13 @@ if (isset($_POST["import"])) {
 
         ?>
     </div>
-
+    <!-- script to deal with table filter -->
+    <script>
+var tf = new TableFilter(document.querySelector('#userTable'), {
+    base_path: '/tablefilter'
+});
+tf.init();
+</script>
 </body>
 
 </html>
