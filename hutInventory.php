@@ -98,69 +98,85 @@ if (isset($_POST["import"])) {
 
 
             // check the date for latest hut updated ['date_last']
-            $dateResult = $db->select("SELECT date_last FROM updateTime");
-            $dateHutUpdated = $dateResult[0]['date_last'];
+            // $dateResult = $db->select("SELECT date_last FROM updateTime");
+            // $dateHutUpdated = $dateResult[0]['date_last'];
 
             //echo ($dateHutUpdated);
             //echo strtotime($datereported);
 
             //if(strtotime($datereported) > strtotime($dateHutUpdated) {
 
-            if ($hut_name != null) {
-                $sqlUpdate = "UPDATE hutInventory SET  gasBottle = ?,sleepingBag = ?,needWash = ?, 
+
+            // check if hut_name existed
+            $existedHuts = $db->select("SELECT hut_name FROM hutInventory");
+            //count the row of the existing
+            $hutcount = count($db->select("SELECT hut_name FROM hutInventory"));
+            $inOrUp = "insert";
+            for ($i=0; $i < $hutcount; $i++) { 
+            if ($hut_name == $existedHuts[$hutcount]['hut_name']) {
+                $inOrUp = "update";
+                return $inOrUp;
+            }
+        }
+            switch ($inOrUp) {
+                case "update": {
+                        $sqlUpdate = "UPDATE hutInventory SET  gasBottle = ?,sleepingBag = ?,needWash = ?, 
                 howManyNeed = ?, spareBox = ?, whatNeed = ?, gearBehind = ?, listGear = ?, 
                 flyOut = ?, listFlyOut = ?, needAnything = ?, needList = ?, fireWood = ?, listfire = ?,
                 photo = ?, note = ?, datereported =? where hut_name = ?";
-                $paramType = "ssssssssssssssssss";
-                $paramArray = array(
+                        $paramType = "ssssssssssssssssss";
+                        $paramArray = array(
 
-                    $gasBottle,
-                    $sleepingBag,
-                    $needWash,
-                    $howManyNeed,
-                    $spareBox,
-                    $whatNeed,
-                    $gearBehind,
-                    $listGear,
-                    $flyOut,
-                    $listFlyOut,
-                    $needAnything,
-                    $needList,
-                    $fireWood,
-                    $listfire,
-                    $photo,
-                    $note,
-                    $datereported,
-                    $hut_name
-                );
-                $insertId = $db->update($sqlUpdate, $paramType, $paramArray);
-            } else {
-                $sqlInsert = "INSERT into hutInventory (hut_name, gasBottle, sleepingBag, needWash,
+                            $gasBottle,
+                            $sleepingBag,
+                            $needWash,
+                            $howManyNeed,
+                            $spareBox,
+                            $whatNeed,
+                            $gearBehind,
+                            $listGear,
+                            $flyOut,
+                            $listFlyOut,
+                            $needAnything,
+                            $needList,
+                            $fireWood,
+                            $listfire,
+                            $photo,
+                            $note,
+                            $datereported,
+                            $hut_name
+                        );
+                        $insertId = $db->update($sqlUpdate, $paramType, $paramArray);
+                    }
+                    break;
+                case "insert": {
+                        $sqlInsert = "INSERT into hutInventory (hut_name, gasBottle, sleepingBag, needWash,
                 howManyNeed, spareBox, whatNeed, gearBehind, listGear, flyOut, listFlyOut, needAnything,
                 needList, fireWood, listfire, photo, note, datereported)
                    values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-                $paramType = "ssssssssssssssssss";
-                $paramArray = array(
-                    $hut_name,
-                    $gasBottle,
-                    $sleepingBag,
-                    $needWash,
-                    $howManyNeed,
-                    $spareBox,
-                    $whatNeed,
-                    $gearBehind,
-                    $listGear,
-                    $flyOut,
-                    $listFlyOut,
-                    $needAnything,
-                    $needList,
-                    $fireWood,
-                    $listfire,
-                    $photo,
-                    $note,
-                    $datereported
-                );
-                $insertId = $db->insert($sqlInsert, $paramType, $paramArray);
+                        $paramType = "ssssssssssssssssss";
+                        $paramArray = array(
+                            $hut_name,
+                            $gasBottle,
+                            $sleepingBag,
+                            $needWash,
+                            $howManyNeed,
+                            $spareBox,
+                            $whatNeed,
+                            $gearBehind,
+                            $listGear,
+                            $flyOut,
+                            $listFlyOut,
+                            $needAnything,
+                            $needList,
+                            $fireWood,
+                            $listfire,
+                            $photo,
+                            $note,
+                            $datereported
+                        );
+                        $insertId = $db->insert($sqlInsert, $paramType, $paramArray);
+                    }
             }
             // $updateTimeTable = "UPDATE updateTime SET date_last = $datereported';
             // $insertTime = $db->update($sqlInsert, $paramType, $paramArray);
@@ -260,6 +276,18 @@ if (isset($_POST["import"])) {
     div#response.display-block {
         display: block;
     }
+
+    #header-fixed {
+        position: fixed;
+        top: 0px;
+        display: none;
+        background-color: white;
+    }
+
+    td,
+    th {
+        word-wrap: break-word;
+    }
 </style>
 <script type="text/javascript">
     $(document).ready(function() {
@@ -285,9 +313,10 @@ if (isset($_POST["import"])) {
 <body>
     <h2>MCU huts inventory</h2>
 
+
     <div id="response" class="<?php if (!empty($type)) {
-            echo $type . " display-block";
-        } ?>">
+                                    echo $type . " display-block";
+                                } ?>">
         <?php if (!empty($message)) {
             echo $message;
         } ?>
@@ -393,7 +422,7 @@ if (isset($_POST["import"])) {
                             <td><?php echo $row['fireWood']; ?></td>
                             <td><?php echo $row['listfire']; ?></td>
                             <td><?php echo $row['listGear']; ?></td>
-                            <td><?php echo $row['photo']; ?></td>
+                            <td><a href = "<?php echo $row['photo']; ?>"><?php echo $row['photo']; ?></a></td>
                             <td><?php echo $row['note']; ?></td>
                             <td><?php echo $row['datereported']; ?></td>
 
@@ -404,6 +433,22 @@ if (isset($_POST["import"])) {
                     ?>
                     </tbody>
             </table>
+            <table id="header-fixed"></table>
+            <script>
+                var tableOffset = $("#userTable").offset().top;
+                var $header = $("#userTable > thead").clone();
+                var $fixedHeader = $("#header-fixed").append($header);
+
+                $(window).bind("scroll", function() {
+                    var offset = $(this).scrollTop();
+
+                    if (offset >= tableOffset && $fixedHeader.is(":hidden")) {
+                        $fixedHeader.show();
+                    } else if (offset < tableOffset) {
+                        $fixedHeader.hide();
+                    }
+                });
+            </script>
 
         <?php
 
