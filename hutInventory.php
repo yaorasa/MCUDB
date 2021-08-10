@@ -97,6 +97,14 @@ if (isset($_POST["import"])) {
             }
 
 
+            // check the date for latest hut updated ['date_last']
+            $dateResult = $db->select("SELECT date_last FROM updateTime");
+            $dateHutUpdated = $dateResult[0]['date_last'];
+
+            //echo ($dateHutUpdated);
+            //echo strtotime($datereported);
+
+            //if(strtotime($datereported) > strtotime($dateHutUpdated) {
 
             if ($hut_name != null) {
                 $sqlUpdate = "UPDATE hutInventory SET  gasBottle = ?,sleepingBag = ?,needWash = ?, 
@@ -154,7 +162,9 @@ if (isset($_POST["import"])) {
                 );
                 $insertId = $db->insert($sqlInsert, $paramType, $paramArray);
             }
-
+            // $updateTimeTable = "UPDATE updateTime SET date_last = $datereported';
+            // $insertTime = $db->update($sqlInsert, $paramType, $paramArray);
+            //}
 
             if (!empty($insertId)) {
                 $type = "success";
@@ -276,8 +286,8 @@ if (isset($_POST["import"])) {
     <h2>MCU huts inventory</h2>
 
     <div id="response" class="<?php if (!empty($type)) {
-                                    echo $type . " display-block";
-                                } ?>">
+            echo $type . " display-block";
+        } ?>">
         <?php if (!empty($message)) {
             echo $message;
         } ?>
