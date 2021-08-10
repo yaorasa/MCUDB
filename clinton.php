@@ -196,6 +196,16 @@ if (isset($_POST["import"])) {
     div#response.display-block {
         display: block;
     }
+
+    #header-fixed {
+        position: fixed;
+        top: 0px;
+        display: none;
+        background-color: white;
+    }
+    td , th {
+        word-wrap: break-word;
+    }
 </style>
 <script type="text/javascript">
     $(document).ready(function() {
@@ -318,7 +328,22 @@ if (isset($_POST["import"])) {
                     ?>
                     </tbody>
             </table>
+            <table id="header-fixed"></table>
+            <script>
+                var tableOffset = $("#userTable").offset().top;
+                var $header = $("#userTable > thead").clone();
+                var $fixedHeader = $("#header-fixed").append($header);
 
+                $(window).bind("scroll", function() {
+                    var offset = $(this).scrollTop();
+
+                    if (offset >= tableOffset && $fixedHeader.is(":hidden")) {
+                        $fixedHeader.show();
+                    } else if (offset < tableOffset) {
+                        $fixedHeader.hide();
+                    }
+                });
+            </script>
         <?php
 
 
