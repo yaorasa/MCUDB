@@ -98,15 +98,19 @@ if (isset($_POST["import"])) {
             // check if trap_name existed
             $existedTraps = $db->select("SELECT code FROM trapInventory");
             //count the row of the existing
-            $trapcount = count($db->select("SELECT code FROM trapInventory"));
+            if ($existedTraps != null ) {
+                $trapcount = count($db->select("SELECT code FROM trapInventory"));
+            }
             $inOrUp = "insert";
-            for ($i = 0; $i < $trapcount; $i++) {
-                if (strcasecmp($code, $existedTraps[$i]['code']) == 0) {
-                    $inOrUp = "update";
-                    return;
+
+            if ($existedTraps != null ){
+                for ($i = 0; $i < $trapcount; $i++) {
+                    // ($code == $existedTraps[$i]['code'])
+                    if (strcasecmp($code, $existedTraps[$i]['code']) == 0) {
+                        $inOrUp = "update";
+                    }
                 }
             }
-
             switch ($inOrUp) {
                 case "update": {
                         $sqlUpdate = "UPDATE trapInventory SET  area = ?,line = ?,
@@ -161,7 +165,8 @@ if (isset($_POST["import"])) {
 
                         );
                         $insertId = $db->insert($sqlInsert, $paramType, $paramArray);
-                    }break;
+                    }
+                    break;
             }
             // $updateTimeTable = "UPDATE updateTime SET date_last = $datereported';
             // $insertTime = $db->update($sqlInsert, $paramType, $paramArray);
@@ -298,7 +303,6 @@ if (isset($_POST["import"])) {
 <body>
     <h2>MCU Traps inventory</h2>
 
-
     <div id="response" class="<?php if (!empty($type)) {
                                     echo $type . " display-block";
                                 } ?>">
@@ -375,8 +379,8 @@ if (isset($_POST["import"])) {
                         <th>Pink Triangles</th>
                         <th>Box Condition</th>
                         <th>Photo</th>
-                        <th>Datereported</th>
-                        <th>Maintainance</th>
+                        <th>Date Reported</th>
+                        <th>Maintainance Needs</th>
 
                     </tr>
                 </thead>
@@ -449,9 +453,9 @@ if (isset($_POST["import"])) {
             col_1: 'select',
             col_2: 'select',
             col_3: 'select',
-            // col_4: 'select',
-            // col_5: 'select',
-            // col_6: 'select',
+            col_4: 'select',
+            col_5: 'select',
+            col_6: 'select',
             col_7: 'select',
             col_8: 'select',
             col_9: 'select',
@@ -475,8 +479,8 @@ if (isset($_POST["import"])) {
                 '100px', '100px', '100px',
                 '100px', '100px', '100px',
                 '100px', '100px', '100px', '100px',
-                '100px', '100px', '260px',
-                '100px', '100px'
+                '100px', '70px', '260px',
+                '100px', '250px'
             ],
             extensions: [{
                 name: 'sort'

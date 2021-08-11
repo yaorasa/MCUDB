@@ -110,14 +110,20 @@ if (isset($_POST["import"])) {
             // check if hut_name existed
             $existedHuts = $db->select("SELECT hut_name FROM hutInventory");
             //count the row of the existing
-            $hutcount = count($db->select("SELECT hut_name FROM hutInventory"));
-            $inOrUp = "insert";
-            for ($i=0; $i < $hutcount; $i++) { 
-            if (strcasecmp($hut_name,$existedHuts[$i]['hut_name']) == 0) {
-                $inOrUp = "update";
-                return $inOrUp;
+            if ($existedHuts != null) {
+                $hutcount = count($db->select("SELECT hut_name FROM hutInventory"));
             }
-        }
+            $inOrUp = "insert";
+
+            if ($existedTraps != null) {
+                for ($i = 0; $i < $hutcount; $i++) {
+                    //($hut_name == $existedHuts[$i]['hut_name'])
+                    if (strcasecmp($hut_name,$existedHuts[$i]['hut_name']) == 0) {
+                        $inOrUp = "update";
+                        // return $inOrUp;
+                    }
+                }
+            }
             switch ($inOrUp) {
                 case "update": {
                         $sqlUpdate = "UPDATE hutInventory SET  gasBottle = ?,sleepingBag = ?,needWash = ?, 
@@ -407,7 +413,7 @@ if (isset($_POST["import"])) {
 
                     <tbody>
                         <tr>
-                            <td style="text-transform: uppercase;"><?php echo $row['hut_name']; ?></td>
+                            <td><?php echo $row['hut_name']; ?></td>
                             <td><?php echo $row['gasBottle']; ?></td>
                             <td><?php echo $row['sleepingBag']; ?></td>
                             <td><?php echo $row['needWash']; ?></td>
@@ -422,7 +428,7 @@ if (isset($_POST["import"])) {
                             <td><?php echo $row['fireWood']; ?></td>
                             <td><?php echo $row['listfire']; ?></td>
                             <td><?php echo $row['listGear']; ?></td>
-                            <td><a href = "<?php echo $row['photo']; ?>"><?php echo $row['photo']; ?></a></td>
+                            <td><a href="<?php echo $row['photo']; ?>"><?php echo $row['photo']; ?></a></td>
                             <td><?php echo $row['note']; ?></td>
                             <td><?php echo $row['datereported']; ?></td>
 
@@ -438,11 +444,11 @@ if (isset($_POST["import"])) {
                 var tableOffset = $("#userTable").offset().top;
                 var $header = $("#userTable > thead").clone();
                 var $fixedHeader = $("#header-fixed").append($header);
-                
+
 
                 $(window).bind("scroll", function() {
                     var offset = $(this).scrollTop();
-                    var offsethr = $(this).scrollLeft() 
+                    var offsethr = $(this).scrollLeft()
 
                     if (offset >= tableOffset && $fixedHeader.is(":hidden")) {
                         $fixedHeader.show();
