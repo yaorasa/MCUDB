@@ -98,12 +98,12 @@ if (isset($_POST["import"])) {
             // check if trap_name existed
             $existedTraps = $db->select("SELECT code FROM trapInventory");
             //count the row of the existing
-            if ($existedTraps != null ) {
+            if ($existedTraps != null) {
                 $trapcount = count($db->select("SELECT code FROM trapInventory"));
             }
             $inOrUp = "insert";
 
-            if ($existedTraps != null ){
+            if ($existedTraps != null) {
                 for ($i = 0; $i < $trapcount; $i++) {
                     // ($code == $existedTraps[$i]['code'])
                     if (strcasecmp($code, $existedTraps[$i]['code']) == 0) {
@@ -194,7 +194,7 @@ if (isset($_POST["import"])) {
 <style>
     body {
         font-family: Arial;
-        width: 95%;
+        /* width: 95%; */
     }
 
     .outer-scontainer {
@@ -227,6 +227,17 @@ if (isset($_POST["import"])) {
         width: 100px;
         border-radius: 2px;
         cursor: pointer;
+    }
+
+    .btn-area {
+        background: #333;
+        border: #EF8D21 1px solid;
+        color: white;
+        font-size: 1.2em;
+        width: 200px;
+        border-radius: 2px;
+        cursor: pointer;
+        padding: 0.5em;
     }
 
     .outer-scontainer table {
@@ -278,6 +289,8 @@ if (isset($_POST["import"])) {
     th {
         word-wrap: break-word;
     }
+
+
 </style>
 <script type="text/javascript">
     $(document).ready(function() {
@@ -312,6 +325,17 @@ if (isset($_POST["import"])) {
     </div>
     <div class="outer-scontainer">
         <div class="row">
+
+            <form class="form-horizontal" action="" method="post">
+                <div class="input-row">
+                    <button type="submit" value="Murchies" name="area1" class="btn-area">Murchies area</button>
+                    <button type="submit" value="Clinton" name="area2" class="btn-area">Clinton area</button>
+                    <button type="submit" value="Arthur" name="area3" class="btn-area">Arthur area</button>
+                    <br />
+
+                </div>
+
+            </form>
 
             <form class="form-horizontal" action="" method="post" name="frmCSVImport" id="frmCSVImport" enctype="multipart/form-data">
                 <div class="input-row">
@@ -351,13 +375,23 @@ if (isset($_POST["import"])) {
         </div>
         <?php
 
-
-
         if (isset($_POST['search'])) {
             $sqlSelect = "SELECT * FROM trapInventory where $column like '%$search%'";
         } else {
             $sqlSelect = "SELECT * FROM trapInventory";
         }
+
+        if (isset($_POST['area1'])) {
+            $sqlSelect = "SELECT * FROM trapInventory where area = 'Murchies'";
+        } else if (isset($_POST['area2'])) {
+            $sqlSelect = "SELECT * FROM trapInventory where area = 'Clinton'";
+        } else if (isset($_POST['area3'])) {
+            $sqlSelect = "SELECT * FROM trapInventory where area = 'Arthur'";
+        }
+        
+
+        
+
         $result = $db->select($sqlSelect);
 
         if (!empty($result)) {
