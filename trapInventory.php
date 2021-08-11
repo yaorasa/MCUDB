@@ -188,7 +188,7 @@ if (isset($_POST["import"])) {
 
 <head>
     <script src="jquery-3.2.1.min.js"></script>
-
+    <!-- <script type="text/javascript" src="html2csv.js" ></script> -->
 </head>
 
 <style>
@@ -328,9 +328,9 @@ if (isset($_POST["import"])) {
 
             <form class="form-horizontal" action="" method="post">
                 <div class="input-row">
-                    <button type="submit" value="Murchies" name="area1" class="btn-area">Murchies area</button>
-                    <button type="submit" value="Clinton" name="area2" class="btn-area">Clinton area</button>
-                    <button type="submit" value="Arthur" name="area3" class="btn-area">Arthur area</button>
+                    <button type="submit" value="Murchies" name="area1" class="btn-area">Murchies Area</button>
+                    <button type="submit" value="Clinton" name="area2" class="btn-area">Clinton Area</button>
+                    <button type="submit" value="Arthur" name="area3" class="btn-area">Arthur Area</button>
                     <br />
 
                 </div>
@@ -371,6 +371,12 @@ if (isset($_POST["import"])) {
                 <button type="submit" id="btnsearch" name="btnsearch" class="btn-search">Search</button>
                 <button type="submit" value="" id="btnreset" name="btnreset" class="btn-submit">See All</button>
             </form>
+            
+            <!-- export to csv btn-->
+            <!-- <input class= "btn-export" value="Export as CSV" type="button" onclick="$('#userTable').table2CSV({header:['area','line','code',
+                'boxLength','entrance','end','internalBaffle','killTrap','lidSecurity','rebar','pinkTri','boxCondi',
+                'photo','datereported','maintain']})"> -->
+
 
         </div>
         <?php
