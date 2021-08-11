@@ -113,7 +113,7 @@ if (isset($_POST["import"])) {
             $hutcount = count($db->select("SELECT hut_name FROM hutInventory"));
             $inOrUp = "insert";
             for ($i=0; $i < $hutcount; $i++) { 
-            if ($hut_name == $existedHuts[$hutcount]['hut_name']) {
+            if (strcasecmp($hut_name,$existedHuts[$i]['hut_name']) == 0) {
                 $inOrUp = "update";
                 return $inOrUp;
             }
@@ -407,7 +407,7 @@ if (isset($_POST["import"])) {
 
                     <tbody>
                         <tr>
-                            <td><?php echo $row['hut_name']; ?></td>
+                            <td style="text-transform: uppercase;"><?php echo $row['hut_name']; ?></td>
                             <td><?php echo $row['gasBottle']; ?></td>
                             <td><?php echo $row['sleepingBag']; ?></td>
                             <td><?php echo $row['needWash']; ?></td>
@@ -438,9 +438,11 @@ if (isset($_POST["import"])) {
                 var tableOffset = $("#userTable").offset().top;
                 var $header = $("#userTable > thead").clone();
                 var $fixedHeader = $("#header-fixed").append($header);
+                
 
                 $(window).bind("scroll", function() {
                     var offset = $(this).scrollTop();
+                    var offsethr = $(this).scrollLeft() 
 
                     if (offset >= tableOffset && $fixedHeader.is(":hidden")) {
                         $fixedHeader.show();
