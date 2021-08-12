@@ -384,24 +384,24 @@ if (isset($_POST["import"])) {
             <table id='userTable'>
                 <thead>
                     <tr>
-                        <th>hut_name</th>
-                        <th>gasBottle</th>
-                        <th>sleepingBag</th>
-                        <th>needWash</th>
-                        <th>howManyNeed</th>
-                        <th>spareBox</th>
-                        <th>whatNeed</th>
-                        <th>gearBehind</th>
-                        <th>listGear</th>
-                        <th>flyOut</th>
-                        <th>listFlyOut</th>
-                        <th>needAnything</th>
-                        <th>needList</th>
-                        <th>fireWood</th>
-                        <th>listfire</th>
-                        <th>photo</th>
-                        <th>note</th>
-                        <th>date</th>
+                        <th>Hut name</th>
+                        <th>Gas Bottle Left</th>
+                        <th>Sleeping Bag</th>
+                        <th>Need Wash?</th>
+                        <th>How Many Need</th>
+                        <th>Spare Box</th>
+                        <th>What is Needed?</th>
+                        <th>Gear Behind?</th>
+                        <th>Gear List</th>
+                        <th>Need Fly Out</th>
+                        <th>Fly Out List</th>
+                        <th>Need Anything?</th>
+                        <th>Need List</th>
+                        <th>Need FireWood?</th>
+                        <th>Fire stuffs list</th>
+                        <th>Photo</th>
+                        <th>Note</th>
+                        <th>Date</th>
 
 
                     </tr>
