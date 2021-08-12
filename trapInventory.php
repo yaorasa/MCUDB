@@ -107,7 +107,11 @@ if (isset($_POST["import"])) {
                 for ($i = 0; $i < $trapcount; $i++) {
                     // ($code == $existedTraps[$i]['code'])
                     if (strcasecmp($code, $existedTraps[$i]['code']) == 0) {
-                        $inOrUp = "update";
+                        if ($area == null) {
+                            $inOrUp = "updateNOarea";
+                        } else {
+                            $inOrUp = "update";
+                        }
                     }
                 }
             }
@@ -122,6 +126,30 @@ if (isset($_POST["import"])) {
 
                             $area,
                             $line,
+                            $boxLength,
+                            $entrance,
+                            $end,
+                            $internalBaffle,
+                            $killTrap,
+                            $lidSecurity,
+                            $rebar,
+                            $pinkTri,
+                            $boxCondi,
+                            $photo,
+                            $datereported,
+                            $maintain,
+                            $code
+                        );
+                        $insertId = $db->update($sqlUpdate, $paramType, $paramArray);
+                    }
+                    break;
+                case "updateNOarea": {
+                        $sqlUpdate = "UPDATE trapInventory SET  
+                boxLength = ?, entrance = ?, end = ?, internalBaffle = ?, killTrap = ?, 
+                lidSecurity = ?, rebar = ?, pinkTri = ?, boxCondi = ?, photo = ?, datereported = ?,
+                maintain = ? where code = ?";
+                        $paramType = "sssssssssssss";
+                        $paramArray = array(
                             $boxLength,
                             $entrance,
                             $end,
@@ -220,9 +248,9 @@ if (isset($_POST["import"])) {
     }
 
     .btn-search {
-        background: #EF8D21;
-        border: #CC6600 1px solid;
-        color: black;
+        border: 1px solid #333;
+        color: #000;
+        background-color: #ddd;
         font-size: 0.9em;
         width: 100px;
         border-radius: 2px;
@@ -233,7 +261,7 @@ if (isset($_POST["import"])) {
         background: #333;
         border: #EF8D21 1px solid;
         color: white;
-        font-size: 1.2em;
+        font-size: 1.1em;
         width: 200px;
         border-radius: 2px;
         cursor: pointer;
@@ -290,7 +318,23 @@ if (isset($_POST["import"])) {
         word-wrap: break-word;
     }
 
+    a.export,
+    a.export:visited {
+        display: inline-block;
+        text-decoration: none;
+        background: #EF8D21;
+        border: #CC6600 1px solid;
+        color: black;
 
+        padding: 8px;
+        margin-left: 300px;
+    }
+
+    .searchExport {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
 </style>
 <script type="text/javascript">
     $(document).ready(function() {
@@ -327,14 +371,16 @@ if (isset($_POST["import"])) {
         <div class="row">
 
             <form class="form-horizontal" action="" method="post">
-                <div class="input-row">
-                    <button type="submit" value="Murchies" name="area1" class="btn-area">Murchies Area</button>
-                    <button type="submit" value="Clinton" name="area2" class="btn-area">Clinton Area</button>
-                    <button type="submit" value="Arthur" name="area3" class="btn-area">Arthur Area</button>
-                    <br />
-
+                <div class="searchExport">
+                    <div class="input-row">
+                        <button type="submit" value="Murchies" name="area1" class="btn-area">Murchies Area</button>
+                        <button type="submit" value="Clinton" name="area2" class="btn-area">Clinton Area</button>
+                        <button type="submit" value="Arthur" name="area3" class="btn-area">Arthur Area</button>
+                        <br />
+                    </div>
+                    <!-- link to export -->
+                    <a href="#" id="xx" class="export">Export to CSV</a>
                 </div>
-
             </form>
 
             <form class="form-horizontal" action="" method="post" name="frmCSVImport" id="frmCSVImport" enctype="multipart/form-data">
@@ -371,11 +417,15 @@ if (isset($_POST["import"])) {
                 <button type="submit" id="btnsearch" name="btnsearch" class="btn-search">Search</button>
                 <button type="submit" value="" id="btnreset" name="btnreset" class="btn-submit">See All</button>
             </form>
-            
+
+
+
             <!-- export to csv btn-->
             <!-- <input class= "btn-export" value="Export as CSV" type="button" onclick="$('#userTable').table2CSV({header:['area','line','code',
                 'boxLength','entrance','end','internalBaffle','killTrap','lidSecurity','rebar','pinkTri','boxCondi',
                 'photo','datereported','maintain']})"> -->
+
+
 
 
         </div>
@@ -394,9 +444,9 @@ if (isset($_POST["import"])) {
         } else if (isset($_POST['area3'])) {
             $sqlSelect = "SELECT * FROM trapInventory where area = 'Arthur'";
         }
-        
 
-        
+
+
 
         $result = $db->select($sqlSelect);
 
@@ -473,6 +523,73 @@ if (isset($_POST["import"])) {
                     }
                 });
             </script> -->
+
+            <!-- script to export csv from a link-->
+            <script>
+                $(document).ready(function() {
+
+                    function exportTableToCSV($table, filename) {
+
+                        var $rows = $table.find('tr:has(td),tr:has(th)'),
+
+                            // Temporary delimiter characters unlikely to be typed by keyboard
+                            // This is to avoid accidentally splitting the actual contents
+                            tmpColDelim = String.fromCharCode(11), // vertical tab character
+                            tmpRowDelim = String.fromCharCode(0), // null character
+
+                            // actual delimiter characters for CSV format
+                            colDelim = '","',
+                            rowDelim = '"\r\n"',
+
+                            // Grab text from table into CSV formatted string
+                            csv = '"' + $rows.map(function(i, row) {
+                                var $row = $(row),
+                                    $cols = $row.find('td,th');
+
+                                return $cols.map(function(j, col) {
+                                    var $col = $(col),
+                                        text = $col.text();
+
+                                    return text.replace(/"/g, '""'); // escape double quotes
+
+                                }).get().join(tmpColDelim);
+
+                            }).get().join(tmpRowDelim)
+                            .split(tmpRowDelim).join(rowDelim)
+                            .split(tmpColDelim).join(colDelim) + '"',
+
+
+
+                            // Data URI
+                            csvData = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csv);
+
+                        console.log(csv);
+
+                        if (window.navigator.msSaveBlob) { // IE 10+
+                            //alert('IE' + csv);
+                            window.navigator.msSaveOrOpenBlob(new Blob([csv], {
+                                type: "text/plain;charset=utf-8;"
+                            }), "csvname.csv")
+                        } else {
+                            $(this).attr({
+                                'download': filename,
+                                'href': csvData,
+                                'target': '_blank'
+                            });
+                        }
+                    }
+
+                    // This must be a hyperlink
+                    $("#xx").on('click', function(event) {
+
+                        exportTableToCSV.apply(this, [$('#userTable'), 'export.csv']);
+
+                        // IF CSV, don't do event.preventDefault() or return false
+                        // We actually need this to be a typical hyperlink
+                    });
+
+                });
+            </script>
 
         <?php
 
