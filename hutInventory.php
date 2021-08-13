@@ -108,22 +108,24 @@ if (isset($_POST["import"])) {
 
 
             // check if hut_name existed
-            $existedHuts = $db->select("SELECT hut_name FROM hutInventory");
+            $existedHuts = $db->select("SELECT hut_name FROM hutInventory where lower(hut_name) = 'lower($hut_name)'");
             //count the row of the existing
+            //$hutcount = count($db->select("SELECT hut_name FROM hutInventory"));
             if ($existedHuts != null) {
-                $hutcount = count($db->select("SELECT hut_name FROM hutInventory"));
+                $inOrUp = "update";
+            } else {
+                $inOrUp = "insert";
             }
-            $inOrUp = "insert";
 
-            if ($existedTraps != null) {
-                for ($i = 0; $i < $hutcount; $i++) {
-                    //($hut_name == $existedHuts[$i]['hut_name'])
-                    if (strcasecmp($hut_name,$existedHuts[$i]['hut_name']) == 0) {
-                        $inOrUp = "update";
-                        // return $inOrUp;
-                    }
-                }
-            }
+            // if ($existedHuts != null) {
+            //     for ($i = 0; $i < $hutcount; $i++) {
+            //         //($hut_name == $existedHuts[$i]['hut_name'])
+            //         if (strcasecmp($hut_name, $existedHuts[$i]['hut_name']) == 0) {
+            //             $inOrUp = "update";
+            //             // return $inOrUp;
+            //         }
+            //     }
+            // }
             switch ($inOrUp) {
                 case "update": {
                         $sqlUpdate = "UPDATE hutInventory SET  gasBottle = ?,sleepingBag = ?,needWash = ?, 
@@ -205,124 +207,188 @@ if (isset($_POST["import"])) {
 <head>
     <script src="jquery-3.2.1.min.js"></script>
 
-</head>
 
-<style>
-    body {
-        font-family: Arial;
-        width: 95%;
-    }
 
-    .outer-scontainer {
-        background: #F0F0F0;
-        border: #e0dfdf 1px solid;
-        padding: 20px;
-        border-radius: 2px;
-    }
+    <style>
+        body {
+            font-family: Arial;
+            width: 95%;
+        }
 
-    .input-row {
-        margin-top: 0px;
-        margin-bottom: 20px;
-    }
+        .outer-scontainer {
+            background: #F0F0F0;
+            border: #e0dfdf 1px solid;
+            padding: 20px;
+            border-radius: 2px;
+        }
 
-    .btn-submit {
-        background: white;
-        border: #EF8D21 1px solid;
-        color: #333;
-        font-size: 0.9em;
-        width: 100px;
-        border-radius: 2px;
-        cursor: pointer;
-    }
+        .input-row {
+            margin-top: 0px;
+            margin-bottom: 20px;
+        }
 
-    .btn-search {
-        background: #EF8D21;
-        border: #CC6600 1px solid;
-        color: black;
-        font-size: 0.9em;
-        width: 100px;
-        border-radius: 2px;
-        cursor: pointer;
-    }
+        .btn-submit {
+            background: white;
+            border: #EF8D21 1px solid;
+            color: #333;
+            font-size: 0.9em;
+            width: 100px;
+            border-radius: 2px;
+            cursor: pointer;
+        }
 
-    .outer-scontainer table {
-        border-collapse: collapse;
-        /* width: 180%; */
-    }
+        .btn-search {
+            border: 1px solid #333;
+            color: #000;
+            background-color: #ddd;
+            font-size: 0.9em;
+            width: 100px;
+            border-radius: 2px;
+            cursor: pointer;
+        }
 
-    .outer-scontainer th {
-        border: 1px solid #dddddd;
-        padding: 8px;
-        text-align: left;
-    }
+        .outer-scontainer table {
+            border-collapse: collapse;
+            /* width: 180%; */
+        }
 
-    .outer-scontainer td {
-        border: 1px solid #dddddd;
-        padding: 8px;
-        text-align: left;
-    }
+        .outer-scontainer th {
+            border: 1px solid #dddddd;
+            padding: 8px;
+            text-align: left;
+        }
 
-    #response {
-        padding: 10px;
-        margin-bottom: 10px;
-        border-radius: 2px;
-        display: none;
-    }
+        .outer-scontainer td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+            text-align: left;
+        }
 
-    .success {
-        background: #c7efd9;
-        border: #bbe2cd 1px solid;
-    }
+        #response {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 2px;
+            display: none;
+        }
 
-    .error {
-        background: #fbcfcf;
-        border: #f3c6c7 1px solid;
-    }
+        .success {
+            background: #c7efd9;
+            border: #bbe2cd 1px solid;
+        }
 
-    div#response.display-block {
-        display: block;
-    }
+        .error {
+            background: #fbcfcf;
+            border: #f3c6c7 1px solid;
+        }
 
-    #header-fixed {
-        position: fixed;
-        top: 0px;
-        display: none;
-        background-color: white;
-    }
+        div#response.display-block {
+            display: block;
+        }
 
-    td,
-    th {
-        word-wrap: break-word;
-    }
-</style>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $("#frmCSVImport").on("submit", function() {
+        #header-fixed {
+            position: fixed;
+            top: 0px;
+            display: none;
+            background-color: white;
+        }
 
-            $("#response").attr("class", "");
-            $("#response").html("");
-            var fileType = ".csv";
-            var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(" + fileType + ")$");
-            if (!regex.test($("#file").val().toLowerCase())) {
-                $("#response").addClass("error");
-                $("#response").addClass("display-block");
-                $("#response").html("Invalid File. Upload : <b>" + fileType + "</b> Files.");
-                return false;
-            }
-            return true;
+        td,
+        th {
+            word-wrap: break-word;
+        }
+
+        a.export,
+        a.export:visited {
+            display: inline-block;
+            text-decoration: none;
+            background: #EF8D21;
+            border: #CC6600 1px solid;
+            color: black;
+
+            padding: 8px;
+            /* margin-left: 300px; */
+        }
+
+        .searchExportEmail {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .searchExportEmail p {
+            margin: 5px;
+        }
+    </style>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#frmCSVImport").on("submit", function() {
+
+                $("#response").attr("class", "");
+                $("#response").html("");
+                var fileType = ".csv";
+                var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(" + fileType + ")$");
+                if (!regex.test($("#file").val().toLowerCase())) {
+                    $("#response").addClass("error");
+                    $("#response").addClass("display-block");
+                    $("#response").html("Invalid File. Upload : <b>" + fileType + "</b> Files.");
+                    return false;
+                }
+                return true;
+            });
         });
-    });
-</script>
+    </script>
 
+    <!-- export to csv -->
+    <script>
+        // Quick and simple export target #table_id into a csv
+        function download_table_as_csv(userTable, separator = ',') {
+            // Select rows from table_id
+            var rows = document.querySelectorAll('table#' + userTable + ' tr');
+            // Construct csv
+            var csv = [];
+            for (var i = 0; i < rows.length; i++) {
+                //check the row is display non >> none CHECK
+                if (userTable.display == "none") {
 
+                } else {
+                    var row = [],
+                        cols = rows[i].querySelectorAll('td, th');
+                    for (var j = 0; j < cols.length; j++) {
+                        // Clean innertext to remove multiple spaces and jumpline (break csv)
+                        var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s)/gm, ' ')
+                        // Escape double-quote with double-double-quote (see https://stackoverflow.com/questions/17808511/properly-escape-a-double-quote-in-csv)
+                        data = data.replace(/"/g, '""');
+                        // Push escaped string
+                        row.push('"' + data + '"');
+                    }
+                    csv.push(row.join(separator));
+                }
+            }
+            var csv_string = csv.join('\n');
+            // Download it
+            var filename = 'export_' + userTable + '_' + new Date().toLocaleDateString() + '.csv';
+            var link = document.createElement('a');
+            link.style.display = 'none';
+            link.setAttribute('target', '_blank');
+            link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv_string));
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</head>
 
 <body>
     <h2>MCU huts inventory</h2>
 
 
-    <div id="response" class="<?php if (!empty($type)) {
-                                    echo $type . " display-block";
-                                } ?>">
+
+    <div id="response" class="
+    <?php if (!empty($type)) {
+        echo $type . " display-block";
+    } ?>">
         <?php if (!empty($message)) {
             echo $message;
         } ?>
@@ -338,39 +404,81 @@ if (isset($_POST["import"])) {
                     <br />
 
                 </div>
-
             </form>
 
-            <form class="form-horizontal" action="" method="POST">
-                Search<input type="text" name="search">
-                Column: <select name="column">
-                    <option value="hut_name">Hut Name</option>
-                    <option value="gasBottle">Gas Bottle Left</option>
-                    <option value="sleepingBag">Sleeping bag(s)</option>
-                    <option value="needWash">Need Wash?</option>
-                    <option value="howManyNeed">How many?</option>
-                    <option value="spareBox">Spare Box</option>
-                    <option value="whatNeed">What is needed?</option>
-                    <option value="gearBehind">Gear Behind?</option>
-                    <option value="listGear">List of Gears</option>
-                    <option value="flyOut">Anything to flyout?</option>
-                    <option value="listFlyOut">List of flyouts</option>
-                    <option value="needAnything">Need anything?</option>
-                    <option value="needList">List what is needed</option>
-                    <option value="fireWood">Any Firewood?</option>
-                    <option value="listfire">List Firestuffs</option>
-                    <option value="photo">Photo</option>
-                    <option value="note">Note</option>
-                </select>
-                <button type="submit" id="btnsearch" name="btnsearch" class="btn-search">Search</button>
-                <button type="submit" value="" id="btnreset" name="btnreset" class="btn-submit">See All</button>
-            </form>
+
+            <div class="searchExportEmail">
+                <form class="form-horizontal" action="" method="POST">
+                    Search<input type="text" name="search">
+                    Column: <select name="column">
+                        <option value="hut_name">Hut Name</option>
+                        <option value="gasBottle">Gas Bottle Left</option>
+                        <option value="sleepingBag">Sleeping bag(s)</option>
+                        <option value="needWash">Need Wash?</option>
+                        <option value="howManyNeed">How many?</option>
+                        <option value="spareBox">Spare Box</option>
+                        <option value="whatNeed">What is needed?</option>
+                        <option value="gearBehind">Gear Behind?</option>
+                        <option value="listGear">List of Gears</option>
+                        <option value="flyOut">Anything to flyout?</option>
+                        <option value="listFlyOut">List of flyouts</option>
+                        <option value="needAnything">Need anything?</option>
+                        <option value="needList">List what is needed</option>
+                        <option value="fireWood">Any Firewood?</option>
+                        <option value="listfire">List Firestuffs</option>
+                        <option value="photo">Photo</option>
+                        <option value="note">Note</option>
+                    </select>
+                    <button type="submit" id="btnsearch" name="btnsearch" class="btn-search">Search</button>
+                    <button type="submit" value="" id="btnreset" name="btnreset" class="btn-submit">See All</button>
+                </form>
+                <div>
+                    <!-- link to download -->
+                    <a href="#" class="export" onclick="download_table_as_csv('userTable');">Download as CSV</a>
+                </div>
+
+                <!-- form to enter email -->
+                <form method="post">
+                    <p>Email Inventory To</p>
+                    <input type="text" name="email">
+                    <input type="text" hidden name="csv">
+                    <input type="submit" name="submitEmail" value="Send">
+                </form>
+            </div>
 
         </div>
+
+        <!-- send email -->
         <?php
+        if (isset($_REQUEST['submitEmail'])) {
+
+            $to = $_POST['email'];
+            //'yourmailid@gmail.com'
+            $subject = "MCU hut inventory";
+            // Get HTML contents from file
+            //$htmlContent = file_get_contents("template.html");
 
 
+            // Set content-type for sending HTML email
+            $headers = "MIME-Version: 1.0" . "\r\n";
+            $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 
+            // Additional headers
+            // $headers .= 'From: discussdesk<discussdesk@gmail.com>' . "\r\n";
+            // $headers .= 'Cc: discussdesk@gmail.com ' . "\r\n";
+
+            // Send email
+            if (mail($to, $subject, $htmlContent, $headers)) {
+                echo 'Email has sent successfully.';
+            } else {
+
+                echo 'Some problem occurred, please try again.';
+            }
+        }
+
+        ?>
+
+        <?php
         if (isset($_POST['search'])) {
             $sqlSelect = "SELECT * FROM hutInventory where $column like '%$search%'";
         } else {
@@ -465,6 +573,7 @@ if (isset($_POST["import"])) {
 
         ?>
     </div>
+
     <!-- import table filter js -->
     <script src="tablefilter/tablefilter.js"></script>
 
