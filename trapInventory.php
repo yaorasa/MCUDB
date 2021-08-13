@@ -223,8 +223,6 @@ if (isset($_POST["import"])) {
 
 <head>
     <script src="jquery-3.2.1.min.js"></script>
-    <!-- <script type="text/javascript" src="html2csv.js" ></script> -->
-</head>
 
 <style>
     body {
@@ -362,6 +360,46 @@ if (isset($_POST["import"])) {
     });
 </script>
 
+<!-- export to csv -->
+<script>
+        // Quick and simple export target #table_id into a csv
+        function download_table_as_csv(userTable, separator = ',') {
+            // Select rows from table_id
+            var rows = document.querySelectorAll('table#' + userTable + ' tr:not([style*="display: none"])');
+            // Construct csv
+            var csv = [];
+            for (var i = 0; i < rows.length; i++) {
+                //check the row is display none >> none CHECK rows.css('display') == 'none'
+                // if (rows.find('tr:not([style*="display: none"])')) {
+
+                // } else {
+                    var row = [],
+                        cols = rows[i].querySelectorAll('td, th');
+                    for (var j = 0; j < cols.length; j++) {
+                        // Clean innertext to remove multiple spaces and jumpline (break csv)
+                        var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s)/gm, ' ')
+                        // Escape double-quote with double-double-quote (see https://stackoverflow.com/questions/17808511/properly-escape-a-double-quote-in-csv)
+                        data = data.replace(/"/g, '""');
+                        // Push escaped string
+                        row.push('"' + data + '"');
+                    }
+                    csv.push(row.join(separator));
+                // }
+            }
+            var csv_string = csv.join('\n');
+            // Download it
+            var filename = 'export_' + userTable + '_' + new Date().toLocaleDateString() + '.csv';
+            var link = document.createElement('a');
+            link.style.display = 'none';
+            link.setAttribute('target', '_blank');
+            link.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv_string));
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</head>
 
 
 <body>
@@ -385,8 +423,7 @@ if (isset($_POST["import"])) {
                         <button type="submit" value="Arthur" name="area3" class="btn-area">Arthur Area</button>
                         <br />
                     </div>
-                    <!-- link to export -->
-                    <a href="#" id="xx" class="export">Export to CSV</a>
+                    
                 </div>
             </form>
 
@@ -424,15 +461,6 @@ if (isset($_POST["import"])) {
                 <button type="submit" id="btnsearch" name="btnsearch" class="btn-search">Search</button>
                 <button type="submit" value="" id="btnreset" name="btnreset" class="btn-submit">See All</button>
             </form>
-
-
-
-            <!-- export to csv btn-->
-            <!-- <input class= "btn-export" value="Export as CSV" type="button" onclick="$('#userTable').table2CSV({header:['area','line','code',
-                'boxLength','entrance','end','internalBaffle','killTrap','lidSecurity','rebar','pinkTri','boxCondi',
-                'photo','datereported','maintain']})"> -->
-
-
 
 
         </div>
@@ -530,73 +558,6 @@ if (isset($_POST["import"])) {
                     }
                 });
             </script> -->
-
-            <!-- script to export csv from a link full table-->
-            <script>
-                $(document).ready(function() {
-
-                    function exportTableToCSV($table, filename) {
-
-                        var $rows = $table.find('tr:has(td),tr:has(th)'),
-
-                            // Temporary delimiter characters unlikely to be typed by keyboard
-                            // This is to avoid accidentally splitting the actual contents
-                            tmpColDelim = String.fromCharCode(11), // vertical tab character
-                            tmpRowDelim = String.fromCharCode(0), // null character
-
-                            // actual delimiter characters for CSV format
-                            colDelim = '","',
-                            rowDelim = '"\r\n"',
-
-                            // Grab text from table into CSV formatted string
-                            csv = '"' + $rows.map(function(i, row) {
-                                var $row = $(row),
-                                    $cols = $row.find('td,th');
-
-                                return $cols.map(function(j, col) {
-                                    var $col = $(col),
-                                        text = $col.text();
-
-                                    return text.replace(/"/g, '""'); // escape double quotes
-
-                                }).get().join(tmpColDelim);
-
-                            }).get().join(tmpRowDelim)
-                            .split(tmpRowDelim).join(rowDelim)
-                            .split(tmpColDelim).join(colDelim) + '"',
-
-
-
-                            // Data URI
-                            csvData = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csv);
-
-                        console.log(csv);
-
-                        if (window.navigator.msSaveBlob) { // IE 10+
-                            //alert('IE' + csv);
-                            window.navigator.msSaveOrOpenBlob(new Blob([csv], {
-                                type: "text/plain;charset=utf-8;"
-                            }), "csvname.csv")
-                        } else {
-                            $(this).attr({
-                                'download': filename,
-                                'href': csvData,
-                                'target': '_blank'
-                            });
-                        }
-                    }
-
-                    // This must be a hyperlink
-                    $("#xx").on('click', function(event) {
-
-                        exportTableToCSV.apply(this, [$('#userTable'), 'export.csv']);
-
-                        // IF CSV, don't do event.preventDefault() or return false
-                        // We actually need this to be a typical hyperlink
-                    });
-
-                });
-            </script>
 
         <?php
 
