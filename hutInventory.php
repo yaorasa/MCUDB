@@ -344,14 +344,14 @@ if (isset($_POST["import"])) {
         // Quick and simple export target #table_id into a csv
         function download_table_as_csv(userTable, separator = ',') {
             // Select rows from table_id
-            var rows = document.querySelectorAll('table#' + userTable + ' tr');
+            var rows = document.querySelectorAll('table#' + userTable + ' tr:not([style*="display: none"])');
             // Construct csv
             var csv = [];
             for (var i = 0; i < rows.length; i++) {
-                //check the row is display non >> none CHECK
-                if (userTable.display == "none") {
+                //check the row is display none >> none CHECK rows.css('display') == 'none'
+                // if (rows.find('tr:not([style*="display: none"])')) {
 
-                } else {
+                // } else {
                     var row = [],
                         cols = rows[i].querySelectorAll('td, th');
                     for (var j = 0; j < cols.length; j++) {
@@ -363,7 +363,7 @@ if (isset($_POST["import"])) {
                         row.push('"' + data + '"');
                     }
                     csv.push(row.join(separator));
-                }
+                // }
             }
             var csv_string = csv.join('\n');
             // Download it
