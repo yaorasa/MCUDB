@@ -224,144 +224,144 @@ if (isset($_POST["import"])) {
 <head>
     <script src="jquery-3.2.1.min.js"></script>
 
-<style>
-    body {
-        font-family: Arial;
-        /* width: 95%; */
-    }
+    <style>
+        body {
+            font-family: Arial;
+            /* width: 95%; */
+        }
 
-    .outer-scontainer {
-        background: #F0F0F0;
-        border: #e0dfdf 1px solid;
-        padding: 20px;
-        border-radius: 2px;
-    }
+        .outer-scontainer {
+            background: #F0F0F0;
+            border: #e0dfdf 1px solid;
+            padding: 20px;
+            border-radius: 2px;
+        }
 
-    .input-row {
-        margin-top: 0px;
-        margin-bottom: 20px;
-    }
+        .input-row {
+            margin-top: 0px;
+            margin-bottom: 20px;
+        }
 
-    .btn-submit {
-        background: white;
-        border: #EF8D21 1px solid;
-        color: #333;
-        font-size: 0.9em;
-        width: 100px;
-        border-radius: 2px;
-        cursor: pointer;
-    }
+        .btn-submit {
+            background: white;
+            border: #EF8D21 1px solid;
+            color: #333;
+            font-size: 0.9em;
+            width: 100px;
+            border-radius: 2px;
+            cursor: pointer;
+        }
 
-    .btn-search {
-        border: 1px solid #333;
-        color: #000;
-        background-color: #ddd;
-        font-size: 0.9em;
-        width: 100px;
-        border-radius: 2px;
-        cursor: pointer;
-    }
+        .btn-search {
+            border: 1px solid #333;
+            color: #000;
+            background-color: #ddd;
+            font-size: 0.9em;
+            width: 100px;
+            border-radius: 2px;
+            cursor: pointer;
+        }
 
-    .btn-area {
-        background: #333;
-        border: #EF8D21 1px solid;
-        color: white;
-        font-size: 1.1em;
-        width: 200px;
-        border-radius: 2px;
-        cursor: pointer;
-        padding: 0.5em;
-    }
+        .btn-area {
+            background: #333;
+            border: #EF8D21 1px solid;
+            color: white;
+            font-size: 1.1em;
+            width: 200px;
+            border-radius: 2px;
+            cursor: pointer;
+            padding: 0.5em;
+        }
 
-    .outer-scontainer table {
-        border-collapse: collapse;
-        /* width: 180%; */
-    }
+        .outer-scontainer table {
+            border-collapse: collapse;
+            /* width: 180%; */
+        }
 
-    .outer-scontainer th {
-        border: 1px solid #dddddd;
-        padding: 8px;
-        text-align: left;
-    }
+        .outer-scontainer th {
+            border: 1px solid #dddddd;
+            padding: 8px;
+            text-align: left;
+        }
 
-    .outer-scontainer td {
-        border: 1px solid #dddddd;
-        padding: 8px;
-        text-align: left;
-    }
+        .outer-scontainer td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+            text-align: left;
+        }
 
-    #response {
-        padding: 10px;
-        margin-bottom: 10px;
-        border-radius: 2px;
-        display: none;
-    }
+        #response {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 2px;
+            display: none;
+        }
 
-    .success {
-        background: #c7efd9;
-        border: #bbe2cd 1px solid;
-    }
+        .success {
+            background: #c7efd9;
+            border: #bbe2cd 1px solid;
+        }
 
-    .error {
-        background: #fbcfcf;
-        border: #f3c6c7 1px solid;
-    }
+        .error {
+            background: #fbcfcf;
+            border: #f3c6c7 1px solid;
+        }
 
-    div#response.display-block {
-        display: block;
-    }
+        div#response.display-block {
+            display: block;
+        }
 
-    #header-fixed {
-        position: fixed;
-        top: 0px;
-        display: none;
-        background-color: white;
-    }
+        #header-fixed {
+            position: fixed;
+            top: 0px;
+            display: none;
+            background-color: white;
+        }
 
-    td,
-    th {
-        word-wrap: break-word;
-    }
+        td,
+        th {
+            word-wrap: break-word;
+        }
 
-    a.export,
-    a.export:visited {
-        display: inline-block;
-        text-decoration: none;
-        background: #EF8D21;
-        border: #CC6600 1px solid;
-        color: black;
+        a.export,
+        a.export:visited {
+            display: inline-block;
+            text-decoration: none;
+            background: #EF8D21;
+            border: #CC6600 1px solid;
+            color: black;
 
-        padding: 8px;
-        margin-left: 300px;
-    }
+            padding: 8px;
+            margin-left: 300px;
+        }
 
-    .searchExport {
-        display: flex;
-        justify-content: flex-start;
-        align-items: flex-start;
-    }
-</style>
-<script type="text/javascript">
-    $(document).ready(function() {
-        $("#frmCSVImport").on("submit", function() {
+        .searchExport {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+        }
+    </style>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#frmCSVImport").on("submit", function() {
 
-            $("#response").attr("class", "");
-            $("#response").html("");
-            var fileType = ".csv";
-            var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(" + fileType + ")$");
-            if (!regex.test($("#file").val().toLowerCase())) {
-                $("#response").addClass("error");
-                $("#response").addClass("display-block");
-                $("#response").html("Invalid File. Upload : <b>" + fileType + "</b> Files.");
-                return false;
-            }
-            return true;
+                $("#response").attr("class", "");
+                $("#response").html("");
+                var fileType = ".csv";
+                var regex = new RegExp("([a-zA-Z0-9\s_\\.\-:])+(" + fileType + ")$");
+                if (!regex.test($("#file").val().toLowerCase())) {
+                    $("#response").addClass("error");
+                    $("#response").addClass("display-block");
+                    $("#response").html("Invalid File. Upload : <b>" + fileType + "</b> Files.");
+                    return false;
+                }
+                return true;
+            });
         });
-    });
-</script>
+    </script>
 
-<!-- export to csv -->
-<script>
+    <!-- export to csv -->
+    <script>
         // Quick and simple export target #table_id into a csv
         function download_table_as_csv(userTable, separator = ',') {
             // Select rows from table_id
@@ -373,17 +373,17 @@ if (isset($_POST["import"])) {
                 // if (rows.find('tr:not([style*="display: none"])')) {
 
                 // } else {
-                    var row = [],
-                        cols = rows[i].querySelectorAll('td, th');
-                    for (var j = 0; j < cols.length; j++) {
-                        // Clean innertext to remove multiple spaces and jumpline (break csv)
-                        var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s)/gm, ' ')
-                        // Escape double-quote with double-double-quote (see https://stackoverflow.com/questions/17808511/properly-escape-a-double-quote-in-csv)
-                        data = data.replace(/"/g, '""');
-                        // Push escaped string
-                        row.push('"' + data + '"');
-                    }
-                    csv.push(row.join(separator));
+                var row = [],
+                    cols = rows[i].querySelectorAll('td, th');
+                for (var j = 0; j < cols.length; j++) {
+                    // Clean innertext to remove multiple spaces and jumpline (break csv)
+                    var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s)/gm, ' ')
+                    // Escape double-quote with double-double-quote (see https://stackoverflow.com/questions/17808511/properly-escape-a-double-quote-in-csv)
+                    data = data.replace(/"/g, '""');
+                    // Push escaped string
+                    row.push('"' + data + '"');
+                }
+                csv.push(row.join(separator));
                 // }
             }
             var csv_string = csv.join('\n');
@@ -423,7 +423,7 @@ if (isset($_POST["import"])) {
                         <button type="submit" value="Arthur" name="area3" class="btn-area">Arthur Area</button>
                         <br />
                     </div>
-                    
+
                 </div>
             </form>
 
@@ -437,110 +437,114 @@ if (isset($_POST["import"])) {
                 </div>
 
             </form>
+            <div class="searchExport">
+                <form class="form-horizontal" action="" method="POST">
+                    Search<input type="text" name="search">
+                    Column: <select name="column">
+                        <option value="area">area</option>
+                        <option value="line">line</option>
+                        <option value="code">code</option>
+                        <option value="boxLength">boxLength</option>
+                        <option value="entrance">entrance</option>
+                        <option value="end">end</option>
+                        <option value="internalBaffle">internalBaffle</option>
+                        <option value="killTrap">killTrap</option>
+                        <option value="lidSecurity">lidSecurity</option>
+                        <option value="rebar">rebar</option>
+                        <option value="pinkTri">pink Triangle</option>
+                        <option value="boxCondi">box Condition</option>
+                        <option value="photo">photo</option>
+                        <option value="datereported">datereported</option>
+                        <option value="maintain">maintainance</option>
 
-            <form class="form-horizontal" action="" method="POST">
-                Search<input type="text" name="search">
-                Column: <select name="column">
-                    <option value="area">area</option>
-                    <option value="line">line</option>
-                    <option value="code">code</option>
-                    <option value="boxLength">boxLength</option>
-                    <option value="entrance">entrance</option>
-                    <option value="end">end</option>
-                    <option value="internalBaffle">internalBaffle</option>
-                    <option value="killTrap">killTrap</option>
-                    <option value="lidSecurity">lidSecurity</option>
-                    <option value="rebar">rebar</option>
-                    <option value="pinkTri">pink Triangle</option>
-                    <option value="boxCondi">box Condition</option>
-                    <option value="photo">photo</option>
-                    <option value="datereported">datereported</option>
-                    <option value="maintain">maintainance</option>
+                    </select>
+                    <button type="submit" id="btnsearch" name="btnsearch" class="btn-search">Search</button>
+                    <button type="submit" value="" id="btnreset" name="btnreset" class="btn-submit">See All</button>
+                </form>
 
-                </select>
-                <button type="submit" id="btnsearch" name="btnsearch" class="btn-search">Search</button>
-                <button type="submit" value="" id="btnreset" name="btnreset" class="btn-submit">See All</button>
-            </form>
-
-
+                <!-- link to download -->
+                <a href="#" class="export" onclick="download_table_as_csv('userTable');">Download as CSV</a>
+            </div>
         </div>
-        <?php
 
-        if (isset($_POST['search'])) {
-            $sqlSelect = "SELECT * FROM trapInventory where $column like '%$search%'";
-        } else {
-            $sqlSelect = "SELECT * FROM trapInventory";
-        }
+    </div>
+    <?php
 
-        if (isset($_POST['area1'])) {
-            $sqlSelect = "SELECT * FROM trapInventory where area = 'Murchies'";
-        } else if (isset($_POST['area2'])) {
-            $sqlSelect = "SELECT * FROM trapInventory where area = 'Clinton'";
-        } else if (isset($_POST['area3'])) {
-            $sqlSelect = "SELECT * FROM trapInventory where area = 'Arthur'";
-        }
+    if (isset($_POST['search'])) {
+        $sqlSelect = "SELECT * FROM trapInventory where $column like '%$search%'";
+    } else {
+        $sqlSelect = "SELECT * FROM trapInventory";
+    }
+
+    if (isset($_POST['area1'])) {
+        $sqlSelect = "SELECT * FROM trapInventory where area = 'Murchies'";
+    } else if (isset($_POST['area2'])) {
+        $sqlSelect = "SELECT * FROM trapInventory where area = 'Clinton'";
+    } else if (isset($_POST['area3'])) {
+        $sqlSelect = "SELECT * FROM trapInventory where area = 'Arthur'";
+    }
 
 
 
 
-        $result = $db->select($sqlSelect);
+    $result = $db->select($sqlSelect);
 
-        if (!empty($result)) {
+    if (!empty($result)) {
 
-        ?>
-            <table id='userTable'>
-                <thead>
+    ?>
+        <table id='userTable'>
+            <thead>
+                <tr>
+                    <th>Area</th>
+                    <th>Line</th>
+                    <th>Code</th>
+                    <th>Box Length</th>
+                    <th>Entrance</th>
+                    <th>End</th>
+                    <th>InternalBaffle</th>
+                    <th>KillTrap</th>
+                    <th>LidSecurity</th>
+                    <th>Rebar</th>
+                    <th>Pink Triangles</th>
+                    <th>Box Condition</th>
+                    <th>Photo</th>
+                    <th>Date Reported</th>
+                    <th>Maintainance Needs</th>
+
+                </tr>
+            </thead>
+            <?php
+
+            foreach ($result as $row) {
+            ?>
+
+                <tbody>
                     <tr>
-                        <th>Area</th>
-                        <th>Line</th>
-                        <th>Code</th>
-                        <th>Box Length</th>
-                        <th>Entrance</th>
-                        <th>End</th>
-                        <th>InternalBaffle</th>
-                        <th>KillTrap</th>
-                        <th>LidSecurity</th>
-                        <th>Rebar</th>
-                        <th>Pink Triangles</th>
-                        <th>Box Condition</th>
-                        <th>Photo</th>
-                        <th>Date Reported</th>
-                        <th>Maintainance Needs</th>
+
+                        <td><?php echo $row['area']; ?></td>
+                        <td><?php echo $row['line']; ?></td>
+                        <td style="text-transform: uppercase;"><?php echo $row['code']; ?></td>
+                        <td><?php echo $row['boxLength']; ?></td>
+                        <td><?php echo $row['entrance']; ?></td>
+                        <td><?php echo $row['end']; ?></td>
+                        <td><?php echo $row['internalBaffle']; ?></td>
+                        <td><?php echo $row['killTrap']; ?></td>
+                        <td><?php echo $row['lidSecurity']; ?></td>
+                        <td><?php echo $row['rebar']; ?></td>
+                        <td><?php echo $row['pinkTri']; ?></td>
+                        <td><?php echo $row['boxCondi']; ?></td>
+                        <td><a href="<?php echo $row['photo']; ?>"><?php echo $row['photo']; ?></a></td>
+                        <td><?php echo $row['datereported']; ?></td>
+                        <td><?php echo $row['maintain']; ?></td>
 
                     </tr>
-                </thead>
                 <?php
+            }
 
-                foreach ($result as $row) {
                 ?>
-
-                    <tbody>
-                        <tr>
-
-                            <td><?php echo $row['area']; ?></td>
-                            <td><?php echo $row['line']; ?></td>
-                            <td style="text-transform: uppercase;"><?php echo $row['code']; ?></td>
-                            <td><?php echo $row['boxLength']; ?></td>
-                            <td><?php echo $row['entrance']; ?></td>
-                            <td><?php echo $row['end']; ?></td>
-                            <td><?php echo $row['internalBaffle']; ?></td>
-                            <td><?php echo $row['killTrap']; ?></td>
-                            <td><?php echo $row['lidSecurity']; ?></td>
-                            <td><?php echo $row['rebar']; ?></td>
-                            <td><?php echo $row['pinkTri']; ?></td>
-                            <td><?php echo $row['boxCondi']; ?></td>
-                            <td><a href="<?php echo $row['photo']; ?>"><?php echo $row['photo']; ?></a></td>
-                            <td><?php echo $row['datereported']; ?></td>
-                            <td><?php echo $row['maintain']; ?></td>
-
-                        </tr>
-                    <?php
-                }
-
-                    ?>
-                    </tbody>
-            </table>
-            <!-- <table id="header-fixed"></table>
+                </tbody>
+        </table>
+        <!-- <table id="header-fixed"></table>
             <script>
                 var tableOffset = $("#userTable").offset().top;
                 var $header = $("#userTable > thead").clone();
@@ -559,12 +563,12 @@ if (isset($_POST["import"])) {
                 });
             </script> -->
 
-        <?php
+    <?php
 
 
-        }
+    }
 
-        ?>
+    ?>
     </div>
     <!-- import table filter js -->
     <script src="tablefilter/tablefilter.js"></script>
