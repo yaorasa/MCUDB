@@ -531,7 +531,7 @@ if (isset($_POST["import"])) {
                 });
             </script> -->
 
-            <!-- script to export csv from a link-->
+            <!-- script to export csv from a link full table-->
             <script>
                 $(document).ready(function() {
 
