@@ -1,4 +1,4 @@
 ﻿deviceID,name,trap_line,trap_name,boxLength,entrance,end,internal_baffels,killtrap,lid_securitys,rebar,pinkTri,box_condition,photo,date_reported,maintain
-,Clinton,Clinton Valley,C001,,new_style,,galve_mesh_trap_baffle,good_design,65mm_screws,,D,,,,
-,Clinton,Clinton Valley,C001a,,new_style,,galve_mesh_trap_baffle,faulty_design,65mm_screws,,B,,,,
-,Clinton,Clinton Valley,C002,,new_style,,galve_mesh_trap_baffle,good_design_trigger_bent,65mm_screws,,A,,,,
+,,,C001,,new_style,,galve_mesh_trap_baffle,good_design,65mm_screws,,,B,,,
+,Clinton,Clinton Valley,C001a,,new_style,,galve_mesh_trap_baffle,faulty_design,65mm_screws,,,B,,,
+,Clinton,Clinton Valley,C002,,new_style,,galve_mesh_trap_baffle,good_design_trigger_bent,65mm_screws,,,A,,,
