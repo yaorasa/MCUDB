@@ -94,27 +94,34 @@ if (isset($_POST["import"])) {
 
             //if(strtotime($datereported) > strtotime($dateHutUpdated) {
 
-
             // check if trap_name existed
-            $existedTraps = $db->select("SELECT code FROM trapInventory");
+            $existedTraps = $db->select("SELECT code FROM trapInventory where lower(code) = 'lower($code)'");
             //count the row of the existing
+            // if ($existedTraps != null) {
+            //     $trapcount = count($db->select("SELECT code FROM trapInventory"));
+            // }
             if ($existedTraps != null) {
-                $trapcount = count($db->select("SELECT code FROM trapInventory"));
-            }
-            $inOrUp = "insert";
-
-            if ($existedTraps != null) {
-                for ($i = 0; $i < $trapcount; $i++) {
-                    // ($code == $existedTraps[$i]['code'])
-                    if (strcasecmp($code, $existedTraps[$i]['code']) == 0) {
-                        if ($area == null) {
-                            $inOrUp = "updateNOarea";
-                        } else {
-                            $inOrUp = "update";
-                        }
-                    }
+                $inOrUp = "update";
+                if ($area == null) {
+                    $inOrUp = "updateNOarea";
                 }
+            } else {
+                $inOrUp = "insert";
             }
+
+
+            // if ($existedTraps != null) {
+            //     for ($i = 0; $i < $trapcount; $i++) {
+            //         // ($code == $existedTraps[$i]['code'])
+            //         if (strcasecmp($code, $existedTraps[$i]['code']) == 0) {
+            //             if ($area == null) {
+            //                 $inOrUp = "updateNOarea";
+            //             } else {
+            //                 $inOrUp = "update";
+            //             }
+            //         }
+            //     }
+            // }
             switch ($inOrUp) {
                 case "update": {
                         $sqlUpdate = "UPDATE trapInventory SET  area = ?,line = ?,
