@@ -26,121 +26,97 @@ if (isset($_POST["import"])) {
             if (isset($column[1])) {
                 $area = mysqli_real_escape_string($conn, $column[1]);
             }
-            $line = "";
+            $otherarea = "";
             if (isset($column[2])) {
-                $line = mysqli_real_escape_string($conn, $column[2]);
+                $otherarea = mysqli_real_escape_string($conn, $column[2]);
+            }
+            $line = "";
+            if (isset($column[3])) {
+                $line = mysqli_real_escape_string($conn, $column[3]);
             }
             $code = "";
-            if (isset($column[3])) {
-                $code = mysqli_real_escape_string($conn, $column[3]);
+            if (isset($column[4])) {
+                $code = mysqli_real_escape_string($conn, $column[4]);
             }
             $boxLength = "";
-            if (isset($column[4])) {
-                $boxLength = mysqli_real_escape_string($conn, $column[4]);
+            if (isset($column[5])) {
+                $boxLength = mysqli_real_escape_string($conn, $column[5]);
             }
             $entrance = "";
-            if (isset($column[5])) {
-                $entrance = mysqli_real_escape_string($conn, $column[5]);
+            if (isset($column[6])) {
+                $entrance = mysqli_real_escape_string($conn, $column[6]);
             }
             $meshType = "";
-            if (isset($column[6])) {
-                $meshType = mysqli_real_escape_string($conn, $column[6]);
-            }
-            $slideOut="";
             if (isset($column[7])) {
                 $meshType = mysqli_real_escape_string($conn, $column[7]);
             }
+            $slideOut="";
+            if (isset($column[8])) {
+                $meshType = mysqli_real_escape_string($conn, $column[8]);
+            }
             $end = "";
-            if (isset($column[7])) {
-                $end = mysqli_real_escape_string($conn, $column[7]);
+            if (isset($column[9])) {
+                $end = mysqli_real_escape_string($conn, $column[9]);
             }
             $internalBaffle = "";
-            if (isset($column[8])) {
-                $internalBaffle = mysqli_real_escape_string($conn, $column[8]);
+            if (isset($column[10])) {
+                $internalBaffle = mysqli_real_escape_string($conn, $column[10]);
             }
             $weight = "";
-            if (isset($column[9])) {
-                $weight = mysqli_real_escape_string($conn, $column[9]);
+            if (isset($column[11])) {
+                $weight = mysqli_real_escape_string($conn, $column[11]);
             }
             $design = "";
-            if (isset($column[10])) {
-                $design = mysqli_real_escape_string($conn, $column[10]);
+            if (isset($column[12])) {
+                $design = mysqli_real_escape_string($conn, $column[12]);
             }
             $lidSecurity = "";
-            if (isset($column[11])) {
-                $lidSecurity = mysqli_real_escape_string($conn, $column[11]);
+            if (isset($column[13])) {
+                $lidSecurity = mysqli_real_escape_string($conn, $column[13]);
             }
             $rebar = "";
-            if (isset($column[12])) {
-                $rebar = mysqli_real_escape_string($conn, $column[12]);
+            if (isset($column[14])) {
+                $rebar = mysqli_real_escape_string($conn, $column[14]);
             }
             $pinkTri = "";
-            if (isset($column[11])) {
-                $pinkTri = mysqli_real_escape_string($conn, $column[11]);
+            if (isset($column[15])) {
+                $pinkTri = mysqli_real_escape_string($conn, $column[15]);
             }
             $boxCondi = "";
-            if (isset($column[13])) {
-                $boxCondi = mysqli_real_escape_string($conn, $column[13]);
+            if (isset($column[16])) {
+                $boxCondi = mysqli_real_escape_string($conn, $column[16]);
             }
             $note = "";
             if (isset($column[17])) {
                 $volName = mysqli_real_escape_string($conn, $column[17]);
             }
             $photo = "";
-            if (isset($column[15])) {
-                $photo = mysqli_real_escape_string($conn, $column[15]);
+            if (isset($column[18])) {
+                $photo = mysqli_real_escape_string($conn, $column[18]);
             }
             $datereported = "";
-            if (isset($column[14])) {
-                $datereported = mysqli_real_escape_string($conn, $column[14]);
+            if (isset($column[19])) {
+                $datereported = mysqli_real_escape_string($conn, $column[19]);
             }
             $volName = "";
-            if (isset($column[16])) {
-                $volName = mysqli_real_escape_string($conn, $column[16]);
+            if (isset($column[20])) {
+                $volName = mysqli_real_escape_string($conn, $column[20]);
             }
 
-
-
-            // check the date for latest hut updated ['date_last']
-            // $dateResult = $db->select("SELECT date_last FROM updateTime");
-            // $dateHutUpdated = $dateResult[0]['date_last'];
-
-            //echo ($dateHutUpdated);
-            //echo strtotime($datereported);
-
-            //if(strtotime($datereported) > strtotime($dateHutUpdated) {
-
-            // check if trap_name existed
-            $existedTraps = $db->select("SELECT code FROM trapInventory where lower(code) = 'lower($code)'");
-            //count the row of the existing
-            // if ($existedTraps != null) {
-            //     $trapcount = count($db->select("SELECT code FROM trapInventory"));
-            // }
+            $existedTraps = $db->select("SELECT code FROM mcuTrap where lower(trim(code)) = 'lower(trim($code))'");
+            $existedArea = $db->select("SELECT area FROM mcuTrap where lower(trim(area)) = 'lower(trim($area))'");
+            
             if ($existedTraps != null) {
-                $inOrUp = "update";
-                if ($line == null) {
-                    $inOrUp = "updateNOline";
+                $inOrUp = "updateNOline";
+                if ($existedArea == null && $area != null) {
+                    $inOrUp = "updateAll";
                 }
             } else {
                 $inOrUp = "insert";
             }
-
-
-            // if ($existedTraps != null) {
-            //     for ($i = 0; $i < $trapcount; $i++) {
-            //         // ($code == $existedTraps[$i]['code'])
-            //         if (strcasecmp($code, $existedTraps[$i]['code']) == 0) {
-            //             if ($area == null) {
-            //                 $inOrUp = "updateNOarea";
-            //             } else {
-            //                 $inOrUp = "update";
-            //             }
-            //         }
-            //     }
-            // }
             switch ($inOrUp) {
-                case "update": {//pinkTri = ?,
-                        $sqlUpdate = "UPDATE trapInventory SET  area = ?,line = ?,
+                case "updateAll": {
+                        $sqlUpdate = "UPDATE mcuTrap SET  area = ?,line=?
                 boxLength = ?, entrance = ?, meshType =?, slideout=?, end = ?, internalBaffle = ?, weight = ?, design =?,
                 lidSecurity = ?, rebar = ?, pinkTri =?  boxCondi = ?, note =?, photo = ?, datereported = ?, 
                 volName = ? where code = ?";
@@ -172,7 +148,7 @@ if (isset($_POST["import"])) {
                     }
                     break;
                 case "updateNOline": {
-                        $sqlUpdate = "UPDATE trapInventory SET  
+                        $sqlUpdate = "UPDATE mcuTrap SET  
                 boxLength = ?, entrance = ?, meshType =?, slideout=?, end = ?, internalBaffle = ?, weight = ?, design =?,
                 lidSecurity = ?, rebar = ?, pinkTri =?,  boxCondi = ?, datereported = ?, note =? , photo = ?,
                 volName = ? where code = ?";
@@ -202,10 +178,10 @@ if (isset($_POST["import"])) {
                     break;
                 case "insert": {
 
-                        $sqlInsert = "INSERT into trapInventory (area, line, code, boxLength, entrance,
-                        meshType, slideOut, end, internalBaffle, weight, design, lidSecurity, rebar, boxCondi, 
+                        $sqlInsert = "INSERT into mcuTrap (area,line, code, boxLength, entrance,
+                        meshType, slideOut, end, internalBaffle, weight, design, lidSecurity, rebar,pinkTri, boxCondi, 
                         note, photo, datereported, volName)
-                   values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                   values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                         $paramType = "sssssssssssssssssss";
                         $paramArray = array(
                             $area,
@@ -501,17 +477,17 @@ if (isset($_POST["import"])) {
     <?php
 
     if (isset($_POST['search'])) {
-        $sqlSelect = "SELECT * FROM trapInventory where $column like '%$search%'";
+        $sqlSelect = "SELECT * FROM mcuTrap where $column like '%$search%'";
     } else {
-        $sqlSelect = "SELECT * FROM trapInventory";
+        $sqlSelect = "SELECT * FROM mcuTrap";
     }
 
     if (isset($_POST['area1'])) {
-        $sqlSelect = "SELECT * FROM trapInventory where area = 'Murchies'";
+        $sqlSelect = "SELECT * FROM mcuTrap where area = 'Murchies'";
     } else if (isset($_POST['area2'])) {
-        $sqlSelect = "SELECT * FROM trapInventory where area = 'Clinton'";
+        $sqlSelect = "SELECT * FROM mcuTrap where area = 'Clinton'";
     } else if (isset($_POST['area3'])) {
-        $sqlSelect = "SELECT * FROM trapInventory where area = 'Arthur'";
+        $sqlSelect = "SELECT * FROM mcuTrap where area = 'Arthur'";
     }
 
 
@@ -535,6 +511,7 @@ if (isset($_POST["import"])) {
                     <th>End Type</th>
                     <th>InternalBaffle</th>
                     <th>Calibration</th>
+                    <th>Design</th>
                     <th>Lid Security</th>
                     <th>Rebar</th>
                     <th>Pink Triangles</th>
@@ -639,14 +616,17 @@ if (isset($_POST["import"])) {
                 'string', 'string', 'string',
                 'string', 'string', 'string', 'string',
                 'string', 'string', 'string',
-                'string', 'string'
+                'string', 'string', 'string',
+                'string', 'string', 'string'
             ],
             col_widths: [
                 '100px', '100px', '100px',
                 '100px', '100px', '100px',
                 '100px', '100px', '100px', '100px',
-                '100px', '70px', '260px',
-                '100px', '250px'
+                '100px', '100px', '100px',
+                '100px', '70px', '150px',
+                '260px', '70px', '70px',
+                
             ],
             extensions: [{
                 name: 'sort'
