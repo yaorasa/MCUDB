@@ -327,6 +327,7 @@ if (isset($_POST["import"])) {
         td,
         th {
             word-wrap: break-word;
+            text-align: center;
         }
 
         a.export,
