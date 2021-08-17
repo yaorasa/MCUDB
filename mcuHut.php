@@ -22,13 +22,13 @@ if (isset($_POST["import"])) {
         while (($column = fgetcsv($file, 10000, ",")) !== FALSE) {
 
 
-            $hut_name = "";
+            $hutname = "";
             if (isset($column[1])) {
-                $hut_name = mysqli_real_escape_string($conn, $column[1]);
+                $hutname = mysqli_real_escape_string($conn, $column[1]);
             }
-            $hut_loc = "";
+            $hutotherName = "";
             if (isset($column[2])) {
-                $hut_loc = mysqli_real_escape_string($conn, $column[2]);
+                $hutotherName = mysqli_real_escape_string($conn, $column[2]);
             }
             $gasBottle = "";
             if (isset($column[3])) {
@@ -125,7 +125,7 @@ if (isset($_POST["import"])) {
             }
             $datereported = "";
             if (isset($column[26])) {
-                $note = mysqli_real_escape_string($conn, $column[26]);
+                $datereported = mysqli_real_escape_string($conn, $column[26]);
             }
             $volName = "";
             if (isset($column[27])) {
@@ -142,36 +142,29 @@ if (isset($_POST["import"])) {
             //if(strtotime($datereported) > strtotime($dateHutUpdated) {
 
 
-            // check if hut_name existed
-            $existedHuts = $db->select("SELECT hut_name FROM hutInventory where lower(hut_name) = 'lower($hut_name)'");
-            //count the row of the existing
-            //$hutcount = count($db->select("SELECT hut_name FROM hutInventory"));
+            // check if hutname existed
+            $existedHuts = $db->select("SELECT hutname FROM mcuHut where lower(hutname) = lower('$hutname')");
+            
             if ($existedHuts != null) {
                 $inOrUp = "update";
-            } else {
+            } else if($hutname == "Other"){
+                $inOrUp = "insertNewHut";
+            }else {
                 $inOrUp = "insert";
             }
-
-            // if ($existedHuts != null) {
-            //     for ($i = 0; $i < $hutcount; $i++) {
-            //         //($hut_name == $existedHuts[$i]['hut_name'])
-            //         if (strcasecmp($hut_name, $existedHuts[$i]['hut_name']) == 0) {
-            //             $inOrUp = "update";
-            //             // return $inOrUp;
-            //         }
-            //     }
-            // }
             switch ($inOrUp) {
                 case "update": {
-                        $sqlUpdate = "UPDATE hutInventory SET  gasBottle = ?,sleepingBag = ?,needWash = ?, 
+                        $sqlUpdate = "UPDATE mcuHut SET  gasBottle = ?, gasBottle2 =?, sleepingBag = ?, sbAmount =?, needWash = ?, 
                 howManyNeed = ?, spareBox = ?, whatNeed = ?, gearBehind = ?, listGear = ?, 
-                flyOut = ?, listFlyOut = ?, needAnything = ?, needList = ?, fireWood = ?, listfire = ?,
-                photo = ?, note = ?, datereported =? where hut_name = ?";
-                        $paramType = "ssssssssssssssssss";
-                        $paramArray = array(
-
+                flyOut = ?, listFlyOut = ?, needAnything = ?, needList = ?, needOther=?, kitchenItem=?, otherKitchen=?,
+                foodItem=?, otherFood=?, fireWood = ?, listfire = ?,
+                note = ?, photo = ?, datereported =?, volName=? where hutname = ?";
+                        $paramType = "ssssssssssssssssssssssssss";
+                        $paramArray = array(    
                             $gasBottle,
+                            $gasBottle2,
                             $sleepingBag,
+                            $sbAmount,
                             $needWash,
                             $howManyNeed,
                             $spareBox,
@@ -182,26 +175,34 @@ if (isset($_POST["import"])) {
                             $listFlyOut,
                             $needAnything,
                             $needList,
+                            $needOther,
+                            $kitchenItem,
+                            $otherKitchen,
+                            $foodItem,
+                            $otherFood,
                             $fireWood,
                             $listfire,
-                            $photo,
                             $note,
+                            $photo,
                             $datereported,
-                            $hut_name
+                            $volName,
+                            $hutname
                         );
                         $insertId = $db->update($sqlUpdate, $paramType, $paramArray);
                     }
                     break;
-                case "insert": {
-                        $sqlInsert = "INSERT into hutInventory (hut_name, hut_loc, gasBottle, gasBottle2,sleepingBag, sbAmount, needWash,
+                case "insertNewHut": {
+                        $sqlInsert = "INSERT into mcuHut (hutname, gasBottle, gasBottle2,sleepingBag, sbAmount, needWash,
                 howManyNeed, spareBox, whatNeed, gearBehind, listGear, flyOut, listFlyOut, needAnything,
                 needList, needOther, kitchenItem, otherKitchen, foodItem, otherFood, fireWood, listfire, note, photo,datereported, volName)
-                   values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-                        $paramType = "ssssssssssssssssss";
+                   values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                        $paramType = "ssssssssssssssssssssssssss";
                         $paramArray = array(
-                            $hut_name,
+                            $hutotherName,
                             $gasBottle,
+                            $gasBottle2,
                             $sleepingBag,
+                            $sbAmount,
                             $needWash,
                             $howManyNeed,
                             $spareBox,
@@ -212,14 +213,61 @@ if (isset($_POST["import"])) {
                             $listFlyOut,
                             $needAnything,
                             $needList,
+                            $needOther,
+                            $kitchenItem,
+                            $otherKitchen,
+                            $foodItem,
+                            $otherFood,
                             $fireWood,
                             $listfire,
-                            $photo,
                             $note,
-                            $datereported
+                            $photo,
+                            $datereported,
+                            $volName
                         );
                         $insertId = $db->insert($sqlInsert, $paramType, $paramArray);
                     }
+                    break;
+                    case "insert": {
+                        
+                        $sqlInsert = "INSERT into mcuHut (hutname, gasBottle, gasBottle2, sleepingBag, sbAmount, needWash,
+                howManyNeed, spareBox, whatNeed, gearBehind, listGear, flyOut, listFlyOut, needAnything,
+                needList, needOther, kitchenItem, otherKitchen, foodItem, otherFood, fireWood, listfire, note, photo,datereported, volName)
+                   values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                        $paramType = "ssssssssssssssssssssssssss";
+                        $paramArray = array(
+                            $hutname,
+                            $gasBottle,
+                            $gasBottle2,
+                            $sleepingBag,
+                            $sbAmount,
+                            $needWash,
+                            $howManyNeed,
+                            $spareBox,
+                            $whatNeed,
+                            $gearBehind,
+                            $listGear,
+                            $flyOut,
+                            $listFlyOut,
+                            $needAnything,
+                            $needList,
+                            $needOther,
+                            $kitchenItem,
+                            $otherKitchen,
+                            $foodItem,
+                            $otherFood,
+                            $fireWood,
+                            $listfire,
+                            $note,
+                            $photo,
+                            $datereported,
+                            $volName
+                        );
+
+                        $insertId = $db->insert($sqlInsert, $paramType, $paramArray);
+                        // $message = $insertId;
+                    }
+                    break;
             }
             // $updateTimeTable = "UPDATE updateTime SET date_last = $datereported';
             // $insertTime = $db->update($sqlInsert, $paramType, $paramArray);
@@ -227,9 +275,11 @@ if (isset($_POST["import"])) {
 
             if (!empty($insertId)) {
                 $type = "success";
+                // $message = $message."CSV Data Imported into the Database";
                 $message = "CSV Data Imported into the Database";
             } else {
                 $type = "error";
+                // $message = $message."Problem in Importing CSV Data";
                 $message = "Problem in Importing CSV Data";
             }
         }
@@ -446,7 +496,7 @@ if (isset($_POST["import"])) {
                 <form class="form-horizontal" action="" method="POST">
                     Search<input type="text" name="search">
                     Column: <select name="column">
-                        <option value="hut_name">Hut Name</option>
+                        <option value="hutname">Hut Name</option>
                         <option value="gasBottle">Gas Bottle Left</option>
                         <option value="sleepingBag">Sleeping bag(s)</option>
                         <option value="needWash">Need Wash?</option>
@@ -473,18 +523,18 @@ if (isset($_POST["import"])) {
                 </div>
 
                 <!-- form to enter email -->
-                <form method="post">
+                <!-- <form method="post">
                     <p>Email Inventory To</p>
                     <input type="text" name="email">
                     <input type="text" hidden name="csv">
                     <input type="submit" name="submitEmail" value="Send">
-                </form>
+                </form> -->
             </div>
 
         </div>
 
         <!-- send email -->
-        <?php
+        <!-- <?php
         if (isset($_REQUEST['submitEmail'])) {
 
             $to = $_POST['email'];
@@ -511,13 +561,13 @@ if (isset($_POST["import"])) {
             }
         }
 
-        ?>
+        ?> -->
 
         <?php
         if (isset($_POST['search'])) {
-            $sqlSelect = "SELECT * FROM hutInventory where $column like '%$search%'";
+            $sqlSelect = "SELECT * FROM mcuHut where $column like '%$search%'";
         } else {
-            $sqlSelect = "SELECT * FROM hutInventory";
+            $sqlSelect = "SELECT * FROM mcuHut";
         }
         $result = $db->select($sqlSelect);
 
@@ -529,22 +579,30 @@ if (isset($_POST["import"])) {
                     <tr>
                         <th>Hut name</th>
                         <th>Gas Bottle Left</th>
-                        <th>Sleeping Bag</th>
-                        <th>Need Wash?</th>
-                        <th>How Many Need</th>
-                        <th>Spare Box</th>
-                        <th>What is Needed?</th>
+                        <th>Gas Bottle 2 Left</th>
+                        <th>Sleeping Bags</th>
+                        <th>Sleeping Bags Need replaced</th>
+                        <th>Need Washing?</th>
+                        <th>How Many Need Washing</th>
+                        <th>Need Spare Box</th>
+                        <th>Spare list</th>
                         <th>Gear Behind?</th>
                         <th>Gear List</th>
                         <th>Need Fly Out</th>
                         <th>Fly Out List</th>
                         <th>Need Anything?</th>
                         <th>Need List</th>
+                        <th>Needs Other</th>
+                        <th>Kitchen Items</th>
+                        <th>Other Kitchen</th>
+                        <th>Food Items</th>
+                        <th>Other Food</th>
                         <th>Need FireWood?</th>
                         <th>Fire stuffs list</th>
-                        <th>Photo</th>
                         <th>Note</th>
+                        <th>Photo</th>
                         <th>Date</th>
+                        <th>Trapper Name</th>
 
 
                     </tr>
@@ -556,9 +614,11 @@ if (isset($_POST["import"])) {
 
                     <tbody>
                         <tr>
-                            <td><?php echo $row['hut_name']; ?></td>
+                            <td><?php echo $row['hutname']; ?></td>
                             <td><?php echo $row['gasBottle']; ?></td>
+                            <td><?php echo $row['gasBottle2']; ?></td>
                             <td><?php echo $row['sleepingBag']; ?></td>
+                            <td><?php echo $row['sbAmount']; ?></td>
                             <td><?php echo $row['needWash']; ?></td>
                             <td><?php echo $row['howManyNeed']; ?></td>
                             <td><?php echo $row['spareBox']; ?></td>
@@ -567,14 +627,19 @@ if (isset($_POST["import"])) {
                             <td><?php echo $row['listGear']; ?></td>
                             <td><?php echo $row['flyOut']; ?></td>
                             <td><?php echo $row['listFlyOut']; ?></td>
+                            <td><?php echo $row['needAnything']; ?></td>
                             <td><?php echo $row['needList']; ?></td>
+                            <td><?php echo $row['needOther']; ?></td>
+                            <td><?php echo $row['kitchenItem']; ?></td>
+                            <td><?php echo $row['otherKitchen']; ?></td>
+                            <td><?php echo $row['foodItem']; ?></td>
+                            <td><?php echo $row['otherFood']; ?></td>
                             <td><?php echo $row['fireWood']; ?></td>
                             <td><?php echo $row['listfire']; ?></td>
-                            <td><?php echo $row['listGear']; ?></td>
-                            <td><a href="<?php echo $row['photo']; ?>"><?php echo $row['photo']; ?></a></td>
                             <td><?php echo $row['note']; ?></td>
+                            <td><a href="<?php echo $row['photo']; ?>"><?php echo $row['photo']; ?></a></td>
                             <td><?php echo $row['datereported']; ?></td>
-
+                            <td><?php echo $row['volName']; ?></td>
                         </tr>
                     <?php
                 }
@@ -622,11 +687,11 @@ if (isset($_POST["import"])) {
             col_2: 'select',
             col_3: 'select',
             col_4: 'select',
-            // col_5: 'select',
-            // col_6: 'select',
-            // col_7: 'select',
-            // col_8: 'select',
-            // col_9: 'select',
+            col_5: 'select',
+            col_6: 'select',
+            col_7: 'select',
+            col_8: 'select',
+            col_9: 'select',
             alternate_rows: true,
             rows_counter: true,
             btn_reset: true,
@@ -641,15 +706,20 @@ if (isset($_POST["import"])) {
                 'string', 'string', 'string', 'string',
                 'string', 'string', 'string',
                 'string', 'string', 'string',
-                'string', 'string'
+                'string', 'string', 'string', 'string',
+                'string', 'string', 'string',
+                'string', 'string', 'string'
             ],
             col_widths: [
                 '100px', '100px', '100px',
                 '100px', '100px', '100px',
-                '100px', '100px', '100px', '100px',
+                '100px', '100px', '300px', '100px',
+                '300px', '100px', '100px',
+                '100px', '300px', '100px',
+                '300px', '100px', '300px', '100px',
                 '100px', '100px', '100px',
-                '100px', '100px', '260px',
-                '100px', '100px'
+                '300px', '100px', '100px'
+                
             ],
             extensions: [{
                 name: 'sort'
