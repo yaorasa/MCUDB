@@ -18,7 +18,8 @@ if (isset($_POST["import"])) {
 
         $file = fopen($fileName, "r");
         //condition to look at the file name -- > variable
-        if ($_FILES['file']['name'] = "%Traps_maintenance%") {
+        // if ($_FILES['file']['name'] = "Traps_maintenance - Sheet1")
+        if (str_contains($_FILES['file']['name'],"Traps_maintenance")) {
             fgets($file);
             while (($column = fgetcsv($file, 10000, ",")) !== FALSE) {
 
@@ -78,50 +79,112 @@ if (isset($_POST["import"])) {
                 if (isset($column[14])) {
                     $trapperName = mysqli_real_escape_string($conn, $column[14]);
                 }
-            }
-            if ($existedTraps != null) {
-                $inOrUp = "update";
-                //  if ($existedArea == null && $area != null) {
-                //     $inOrUp = "updateNewArea";
-                // }
-            } else if ($existedArea == null) { //new area
-                $inOrUp = "insertNewArea";
-            } else if ($area != null) { //existing area
-                $inOrUp = "insertwArea";
-            }
-            switch ($inOrUp) {
-                case "insertwArea": {
 
-                        $sqlInsert = "INSERT into mcuTrap (area, code, boxLength, entrance,
-            meshType, slideOut, end, internalBaffle, weight, design, lidSecurity, rebar,pinkTri, boxCondi, 
-            note, photo, datereported, volName)
-       values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-                        $paramType = "ssssssssssssssssss";
-                        $paramArray = array(
-                            $area,
-                            $code,
-                            $boxLength,
-                            $entrance,
-                            $meshType,
-                            $slideout,
-                            $end,
-                            $internalBaffle,
-                            $weight,
-                            $design,
-                            $lidSecurity,
-                            $rebar,
-                            $pinkTri,
-                            $boxCondi,
-                            $note,
-                            $photo,
-                            $datereported,
-                            $volName
+                // check if the input trap ID and trap area are already inside the database
+                $existedTraps = $db->select("SELECT code FROM mcuTrap where lower(code) = lower(trim('$code'))");
+                // $existedArea = $db->select("SELECT area FROM mcuTrap where lower(trim(area)) = lower(trim('$areaM'))");
 
-                        );
-                        $insertId = $db->insert($sqlInsert, $paramType, $paramArray);
-                    }
+                if ($existedTraps != null) {
+                    $inOrUpM = "update";
+                    //  if ($existedArea == null && $area != null) {
+                    //     $inOrUp = "updateNewArea";
+                    // }
+                } else if ($areaM == "Other") { //new area
+                    $inOrUpM = "insertNewArea";
+                } else if ($areaM != null) { //existing area
+                    $inOrUpM = "insertwArea";
+                }
+                switch ($inOrUpM) {
+                    case "insertwArea": {
+
+                            $sqlInsert = "INSERT into mcuTrap (area, code, rebar1Need, rebar2Need,
+                        relevelNeed, relocationNeed, newlidNeed, pinkTriNeed, marketPole, 
+                        calibrate, notesM, dateMaintain, trapperName)
+                    values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                            $paramType = "sssssssssssss";
+                            $paramArray = array(
+                                $areaM,
+                                $code,
+                                $rebar1Need,
+                                $rebar2Need,
+                                $relevelNeed,
+                                $relocationNeed,
+                                $newlidNeed,
+                                $pinkTriNeed,
+                                $marketPole,
+                                $calibrate,
+                                $notesM,
+                                $dateMaintain,
+                                $trapperName
+
+                            );
+                            $insertId = $db->insert($sqlInsert, $paramType, $paramArray);
+                        }
+                        break;
+
+                    case "insertNewArea": {
+
+                            $sqlInsert = "INSERT into mcuTrap (area, code, rebar1Need, rebar2Need,
+                    relevelNeed, relocationNeed, newlidNeed, pinkTriNeed, marketPole, 
+                    calibrate, notesM, dateMaintain, trapperName)
+                    values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                            $paramType = "sssssssssssss";
+                            $paramArray = array(
+                                $otherareaM,
+                                $code,
+                                $rebar1Need,
+                                $rebar2Need,
+                                $relevelNeed,
+                                $relocationNeed,
+                                $newlidNeed,
+                                $pinkTriNeed,
+                                $marketPole,
+                                $calibrate,
+                                $notesM,
+                                $dateMaintain,
+                                $trapperName
+
+                            );
+                            $insertId = $db->insert($sqlInsert, $paramType, $paramArray);
+                        }
+                        break;
+
+                    case "update": {
+
+                            $sqlInsert = "UPDATE mcuTrap SET rebar1Need=?, rebar2Need=?,
+                            relevelNeed=?, relocationNeed=?, newlidNeed=?, pinkTriNeed=?, marketPole=?, 
+                            calibrate=?, notesM=?, dateMaintain=?, trapperName=? where code =?";
+                            $paramType = "ssssssssssss";
+
+                            $paramArray = array(
+
+                                $rebar1Need,
+                                $rebar2Need,
+                                $relevelNeed,
+                                $relocationNeed,
+                                $newlidNeed,
+                                $pinkTriNeed,
+                                $marketPole,
+                                $calibrate,
+                                $notesM,
+                                $dateMaintain,
+                                $trapperName,
+                                $code
+
+                            );
+                            $insertId = $db->update($sqlInsert, $paramType, $paramArray);
+                        }
+                        break;
+                }
             }
-            break;
+            if (!empty($insertId)) {
+                $type = "success";
+                $message = "CSV Data Imported into the Database";
+            } else {
+                $type = "error";
+                $message = "Problem in Importing CSV Data";
+            }
+
             //checking the file upload that is not Maintenance form
         } else {
             fgets($file);
@@ -597,9 +660,9 @@ if (isset($_POST["import"])) {
                 <form class="form-horizontal" action="" method="POST">
                     Search<input type="text" name="search">
                     Column: <select name="column">
+                        <option value="code">code</option>
                         <option value="area">area</option>
                         <option value="line">line</option>
-                        <option value="code">code</option>
                         <option value="boxLength">boxLength</option>
                         <option value="entrance">front entrance?</option>
                         <option value="end">end type</option>
@@ -674,9 +737,11 @@ if (isset($_POST["import"])) {
                     <th>Need Rebar2</th>
                     <th>Need Relevel</th>
                     <th>Need Relocation</th>
+                    <th>Need New Lid</th>
                     <th>Need Pink Triangle</th>
                     <th>Need Market Pole</th>
                     <th>Calibration</th>
+                    <th>Date Maintained</th>
                     <th>Maintainance Note</th>
                     <th>Trapper name</th>
 
@@ -710,6 +775,17 @@ if (isset($_POST["import"])) {
                         <td><a href="<?php echo $row['photo']; ?>"><?php echo $row['photo']; ?></a></td>
                         <td><?php echo $row['datereported']; ?></td>
                         <td><?php echo $row['volName']; ?></td>
+                        <td><?php echo $row['rebar1Need']; ?></td>
+                        <td><?php echo $row['rebar2Need']; ?></td>
+                        <td><?php echo $row['relevelNeed']; ?></td>
+                        <td><?php echo $row['relocationNeed']; ?></td>
+                        <td><?php echo $row['newlidNeed']; ?></td>
+                        <td><?php echo $row['pinkTriNeed']; ?></td>
+                        <td><?php echo $row['marketPole']; ?></td>
+                        <td><?php echo $row['calibrate']; ?></td>
+                        <td><?php echo $row['notesM']; ?></td>
+                        <td><?php echo $row['dateMaintain']; ?></td>
+                        <td><?php echo $row['trapperName']; ?></td>
 
                     </tr>
                 <?php
@@ -778,7 +854,11 @@ if (isset($_POST["import"])) {
                 'string', 'string', 'string', 'string',
                 'string', 'string', 'string',
                 'string', 'string', 'string',
-                'string', 'string', 'string'
+                'string', 'string', 'string',
+                'string', 'string', 'string',
+                'string', 'string', 'string',
+                'string', 'string', 'string', 'string',
+                'string'
             ],
             col_widths: [
                 '100px', '100px', '100px',
@@ -786,7 +866,11 @@ if (isset($_POST["import"])) {
                 '100px', '100px', '100px', '100px',
                 '100px', '100px', '100px',
                 '70px', '70px', '150px',
-                '260px', '100px', '100px'
+                '260px', '100px', '100px',
+                '100px', '100px', '100px',
+                '100px', '100px', '100px',
+                '100px', '100px', '100px', '100px',
+                '100px'
 
             ],
             extensions: [{

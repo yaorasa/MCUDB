@@ -108,7 +108,7 @@ class DataSource
 
         $stmt->execute();
         $insertId = $stmt->insert_id;
-        $insertId = $stmt->error;
+        // $insertId = $stmt->error;
         return $insertId;
     }
 
