@@ -340,7 +340,7 @@ if (isset($_POST["import"])) {
             </form> -->
             <h2>This page is for setting up only. <br>
         For full functionality please use <a href="http://localhost/MCU/mcuDB/mcutrap.php">
-            the traps page</a>.</h2>
+            the trap page</a>.</h2>
 
             <form class="form-horizontal" action="" method="post" name="frmCSVImport" id="frmCSVImport" enctype="multipart/form-data">
                 <div class="input-row">
