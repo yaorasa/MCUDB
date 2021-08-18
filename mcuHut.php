@@ -46,7 +46,7 @@ if (isset($_POST["import"])) {
             if (isset($column[6])) {
                 $sbAmount = mysqli_real_escape_string($conn, $column[6]);
             }
-           
+
             $needWash = "";
             if (isset($column[7])) {
                 $needWash = mysqli_real_escape_string($conn, $column[7]);
@@ -144,12 +144,12 @@ if (isset($_POST["import"])) {
 
             // check if hutname existed
             $existedHuts = $db->select("SELECT hutname FROM mcuHut where lower(hutname) = lower('$hutname')");
-            
+
             if ($existedHuts != null) {
                 $inOrUp = "update";
-            } else if($hutname == "Other"){
+            } else if ($hutname == "Other") {
                 $inOrUp = "insertNewHut";
-            }else {
+            } else {
                 $inOrUp = "insert";
             }
             switch ($inOrUp) {
@@ -160,7 +160,7 @@ if (isset($_POST["import"])) {
                 foodItem=?, otherFood=?, fireWood = ?, listfire = ?,
                 note = ?, photo = ?, datereported =?, volName=? where hutname = ?";
                         $paramType = "ssssssssssssssssssssssssss";
-                        $paramArray = array(    
+                        $paramArray = array(
                             $gasBottle,
                             $gasBottle2,
                             $sleepingBag,
@@ -228,8 +228,8 @@ if (isset($_POST["import"])) {
                         $insertId = $db->insert($sqlInsert, $paramType, $paramArray);
                     }
                     break;
-                    case "insert": {
-                        
+                case "insert": {
+
                         $sqlInsert = "INSERT into mcuHut (hutname, gasBottle, gasBottle2, sleepingBag, sbAmount, needWash,
                 howManyNeed, spareBox, whatNeed, gearBehind, listGear, flyOut, listFlyOut, needAnything,
                 needList, needOther, kitchenItem, otherKitchen, foodItem, otherFood, fireWood, listfire, note, photo,datereported, volName)
@@ -295,7 +295,7 @@ if (isset($_POST["import"])) {
 
 
     <style>
-        
+
     </style>
     <script type="text/javascript">
         $(document).ready(function() {
@@ -329,17 +329,17 @@ if (isset($_POST["import"])) {
                 // if (rows.find('tr:not([style*="display: none"])')) {
 
                 // } else {
-                    var row = [],
-                        cols = rows[i].querySelectorAll('td, th');
-                    for (var j = 0; j < cols.length; j++) {
-                        // Clean innertext to remove multiple spaces and jumpline (break csv)
-                        var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s)/gm, ' ')
-                        // Escape double-quote with double-double-quote (see https://stackoverflow.com/questions/17808511/properly-escape-a-double-quote-in-csv)
-                        data = data.replace(/"/g, '""');
-                        // Push escaped string
-                        row.push('"' + data + '"');
-                    }
-                    csv.push(row.join(separator));
+                var row = [],
+                    cols = rows[i].querySelectorAll('td, th');
+                for (var j = 0; j < cols.length; j++) {
+                    // Clean innertext to remove multiple spaces and jumpline (break csv)
+                    var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s)/gm, ' ')
+                    // Escape double-quote with double-double-quote (see https://stackoverflow.com/questions/17808511/properly-escape-a-double-quote-in-csv)
+                    data = data.replace(/"/g, '""');
+                    // Push escaped string
+                    row.push('"' + data + '"');
+                }
+                csv.push(row.join(separator));
                 // }
             }
             var csv_string = csv.join('\n');
@@ -358,7 +358,7 @@ if (isset($_POST["import"])) {
 </head>
 
 <body>
-<nav class="navbar sticky">
+    <nav class="navbar sticky">
         <a class="navbar-brand" href="http://localhost/MCU/mcuDB/mcuhut.php">
             <div class="logo-image">
                 <img src="./img/MCU_logo.jpg" class="img-fluid">
@@ -434,153 +434,164 @@ if (isset($_POST["import"])) {
                     <p>Email Inventory To</p>
                     <input type="text" name="email">
                     <input type="text" hidden name="csv">
-                    <input type="submit" name="submitEmail" value="Send">
+                    <input class="btn-search" type="submit" name="submitEmail" value="Send">
+                    <input type="text" name="csvSend" hidden>
                 </form> -->
             </div>
 
         </div>
     </div>
+    <!-- send email js -->
+    <!-- <script type="text/javascript">
+        $(document).ready(function() {
+            $("#csvSend").on("submit", function() {
+                $("#csvSend").value = csv_string;
+                // Select rows from table_id
+                var rows = document.querySelectorAll('table#' + userTable + ' tr:not([style*="display: none"])');
+                // Construct csv
+                var csv = [];
+                for (var i = 0; i < rows.length; i++) {
+                    //check the row is display none >> none CHECK rows.css('display') == 'none'
+                    // if (rows.find('tr:not([style*="display: none"])')) {
 
-        <!-- send email -->
-        <!-- <?php
-        if (isset($_REQUEST['submitEmail'])) {
-
-            $to = $_POST['email'];
-            //'yourmailid@gmail.com'
-            $subject = "MCU hut inventory";
-            // Get HTML contents from file
-            //$htmlContent = file_get_contents("template.html");
-
-
-            // Set content-type for sending HTML email
-            $headers = "MIME-Version: 1.0" . "\r\n";
-            $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-
-            // Additional headers
-            // $headers .= 'From: discussdesk<discussdesk@gmail.com>' . "\r\n";
-            // $headers .= 'Cc: discussdesk@gmail.com ' . "\r\n";
-
-            // Send email
-            if (mail($to, $subject, $htmlContent, $headers)) {
-                echo 'Email has sent successfully.';
-            } else {
-
-                echo 'Some problem occurred, please try again.';
-            }
-        }
-
-        ?> -->
-
-        <?php
-        if (isset($_POST['search'])) {
-            $sqlSelect = "SELECT * FROM mcuHut where $column like '%$search%'";
-        } else {
-            $sqlSelect = "SELECT * FROM mcuHut";
-        }
-        $result = $db->select($sqlSelect);
-
-        if (!empty($result)) {
-
-        ?>
-            <table id='userTable' class="TF sticky">
-                <thead>
-                    <tr>
-                        <th>Hut name</th>
-                        <th>Gas Bottle Left</th>
-                        <th>Gas Bottle 2 Left</th>
-                        <th>Sleeping Bags</th>
-                        <th>Sleeping Bags Need replaced</th>
-                        <th>Need Washing?</th>
-                        <th>How Many Need Washing</th>
-                        <th>Need Spare Box</th>
-                        <th>Spare list</th>
-                        <th>Gear Behind?</th>
-                        <th>Gear List</th>
-                        <th>Need Fly Out</th>
-                        <th>Fly Out List</th>
-                        <th>Need Anything?</th>
-                        <th>Need List</th>
-                        <th>Needs Other</th>
-                        <th>Kitchen Items</th>
-                        <th>Other Kitchen</th>
-                        <th>Food Items</th>
-                        <th>Other Food</th>
-                        <th>Need FireWood?</th>
-                        <th>Fire stuffs list</th>
-                        <th>Note</th>
-                        <th>Photo</th>
-                        <th>Date</th>
-                        <th>Trapper Name</th>
-
-
-                    </tr>
-                </thead>
-                <?php
-
-                foreach ($result as $row) {
-                ?>
-
-                    <tbody>
-                        <tr>
-                            <td><?php echo $row['hutname']; ?></td>
-                            <td><?php echo $row['gasBottle']; ?></td>
-                            <td><?php echo $row['gasBottle2']; ?></td>
-                            <td><?php echo $row['sleepingBag']; ?></td>
-                            <td><?php echo $row['sbAmount']; ?></td>
-                            <td><?php echo $row['needWash']; ?></td>
-                            <td><?php echo $row['howManyNeed']; ?></td>
-                            <td><?php echo $row['spareBox']; ?></td>
-                            <td><?php echo $row['whatNeed']; ?></td>
-                            <td><?php echo $row['gearBehind']; ?></td>
-                            <td><?php echo $row['listGear']; ?></td>
-                            <td><?php echo $row['flyOut']; ?></td>
-                            <td><?php echo $row['listFlyOut']; ?></td>
-                            <td><?php echo $row['needAnything']; ?></td>
-                            <td><?php echo $row['needList']; ?></td>
-                            <td><?php echo $row['needOther']; ?></td>
-                            <td><?php echo $row['kitchenItem']; ?></td>
-                            <td><?php echo $row['otherKitchen']; ?></td>
-                            <td><?php echo $row['foodItem']; ?></td>
-                            <td><?php echo $row['otherFood']; ?></td>
-                            <td><?php echo $row['fireWood']; ?></td>
-                            <td><?php echo $row['listfire']; ?></td>
-                            <td><?php echo $row['note']; ?></td>
-                            <td><a href="<?php echo $row['photo']; ?>"><?php echo $row['photo']; ?></a></td>
-                            <td><?php echo $row['datereported']; ?></td>
-                            <td><?php echo $row['volName']; ?></td>
-                        </tr>
-                    <?php
-                }
-
-                    ?>
-                    </tbody>
-            </table>
-            <!-- fixed header 1st attempt -->
-            <!-- <table id="header-fixed"></table>
-            <script>
-                var tableOffset = $("#userTable").offset().top;
-                var $header = $("#userTable > thead").clone();
-                var $fixedHeader = $("#header-fixed").append($header);
-
-
-                $(window).bind("scroll", function() {
-                    var offset = $(this).scrollTop();
-                    var offsethr = $(this).scrollLeft()
-
-                    if (offset >= tableOffset && $fixedHeader.is(":hidden")) {
-                        $fixedHeader.show();
-                    } else if (offset < tableOffset) {
-                        $fixedHeader.hide();
+                    // } else {
+                    var row = [],
+                        cols = rows[i].querySelectorAll('td, th');
+                    for (var j = 0; j < cols.length; j++) {
+                        // Clean innertext to remove multiple spaces and jumpline (break csv)
+                        var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s)/gm, ' ')
+                        // Escape double-quote with double-double-quote (see https://stackoverflow.com/questions/17808511/properly-escape-a-double-quote-in-csv)
+                        data = data.replace(/"/g, '""');
+                        // Push escaped string
+                        row.push('"' + data + '"');
                     }
-                });
-            </script> -->
+                    csv.push(row.join(separator));
 
-        <?php
+                    // }
+                }
+                var csv_string = csv.join('\n');
+                return csv.string;
+            });
+        }); 
+    </script>-->
+
+    <!-- send email -->
+    <?php
+    // if (isset($_REQUEST['submitEmail'])) {
+
+    //     $to = $_POST['email'];
+    //     //'yourmailid@gmail.com'
+    //     $subject = "MCU hut inventory";
+    //     // Get HTML contents from file
+    //     //$htmlContent = file_get_contents("template.html");
+    //     $htmlContent = $_POST['csvSend'];
+        
+    //     // Set content-type for sending HTML email
+    //     $headers = "MIME-Version: 1.0" . "\r\n";
+    //     $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+    //     // Send email
+    //     if (mail($to, $subject, $htmlContent, $headers)) {
+    //         echo 'Email has sent successfully.';
+    //     } else {
+
+    //         echo 'Some problem occurred, please try again.';
+    //     }
+    // }
+
+    ?>
+
+    <?php
+    if (isset($_POST['search'])) {
+        $sqlSelect = "SELECT * FROM mcuHut where $column like '%$search%'";
+    } else {
+        $sqlSelect = "SELECT * FROM mcuHut";
+    }
+    $result = $db->select($sqlSelect);
+
+    if (!empty($result)) {
+
+    ?>
+        <table id='userTable' class="TF sticky">
+            <thead>
+                <tr>
+                    <th>Hut name</th>
+                    <th>Gas Bottle Left</th>
+                    <th>Gas Bottle 2 Left</th>
+                    <th>Sleeping Bags</th>
+                    <th>Sleeping Bags Need replaced</th>
+                    <th>Need Washing?</th>
+                    <th>How Many Need Washing</th>
+                    <th>Need Spare Box</th>
+                    <th>Spare list</th>
+                    <th>Gear Behind?</th>
+                    <th>Gear List</th>
+                    <th>Need Fly Out</th>
+                    <th>Fly Out List</th>
+                    <th>Need Anything?</th>
+                    <th>Need List</th>
+                    <th>Needs Other</th>
+                    <th>Kitchen Items</th>
+                    <th>Other Kitchen</th>
+                    <th>Food Items</th>
+                    <th>Other Food</th>
+                    <th>Need FireWood?</th>
+                    <th>Fire stuffs list</th>
+                    <th>Note</th>
+                    <th>Photo</th>
+                    <th>Date</th>
+                    <th>Trapper Name</th>
 
 
-        }
+                </tr>
+            </thead>
+            <?php
 
-        ?>
+            foreach ($result as $row) {
+            ?>
+
+                <tbody>
+                    <tr>
+                        <td><?php echo $row['hutname']; ?></td>
+                        <td><?php echo $row['gasBottle']; ?></td>
+                        <td><?php echo $row['gasBottle2']; ?></td>
+                        <td><?php echo $row['sleepingBag']; ?></td>
+                        <td><?php echo $row['sbAmount']; ?></td>
+                        <td><?php echo $row['needWash']; ?></td>
+                        <td><?php echo $row['howManyNeed']; ?></td>
+                        <td><?php echo $row['spareBox']; ?></td>
+                        <td><?php echo $row['whatNeed']; ?></td>
+                        <td><?php echo $row['gearBehind']; ?></td>
+                        <td><?php echo $row['listGear']; ?></td>
+                        <td><?php echo $row['flyOut']; ?></td>
+                        <td><?php echo $row['listFlyOut']; ?></td>
+                        <td><?php echo $row['needAnything']; ?></td>
+                        <td><?php echo $row['needList']; ?></td>
+                        <td><?php echo $row['needOther']; ?></td>
+                        <td><?php echo $row['kitchenItem']; ?></td>
+                        <td><?php echo $row['otherKitchen']; ?></td>
+                        <td><?php echo $row['foodItem']; ?></td>
+                        <td><?php echo $row['otherFood']; ?></td>
+                        <td><?php echo $row['fireWood']; ?></td>
+                        <td><?php echo $row['listfire']; ?></td>
+                        <td><?php echo $row['note']; ?></td>
+                        <td><a href="<?php echo $row['photo']; ?>"><?php echo $row['photo']; ?></a></td>
+                        <td><?php echo $row['datereported']; ?></td>
+                        <td><?php echo $row['volName']; ?></td>
+                    </tr>
+                <?php
+            }
+
+                ?>
+                </tbody>
+        </table>
+
+    <?php
+
+
+    }
+
+    ?>
     </div>
 
     <!-- import table filter js -->
@@ -599,13 +610,13 @@ if (isset($_POST["import"])) {
             col_5: 'select',
             col_6: 'select',
             col_7: 'select',
-            
+
             col_9: 'select',
             col_11: 'select',
-            col_13:'select',
+            col_13: 'select',
             // col_15:'select',
             col_20: 'select',
-            col_25:'select',
+            col_25: 'select',
             alternate_rows: true,
             rows_counter: true,
             btn_reset: true,
@@ -633,7 +644,7 @@ if (isset($_POST["import"])) {
                 '300px', '200px', '300px', '200px',
                 '100px', '200px', '300px',
                 '300px', '100px', '100px'
-                
+
             ],
             extensions: [{
                 name: 'sort'
