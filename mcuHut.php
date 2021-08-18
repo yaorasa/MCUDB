@@ -400,7 +400,7 @@ if (isset($_POST["import"])) {
 
 
             <div class="searchExportEmail">
-                <form class="form-horizontal" action="" method="POST">
+                <form class="form-horizontal formsearch" action="" method="POST">
                     Search<input type="text" name="search">
                     Column: <select name="column">
                         <option value="hutname">Hut Name</option>

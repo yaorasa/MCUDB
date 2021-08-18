@@ -554,7 +554,7 @@ if (isset($_POST["import"])) {
 
             </form>
             <div class="searchExport">
-                <form class="form-horizontal" action="" method="POST">
+                <form class="form-horizontal formsearch" action="" method="POST">
                     Search<input type="text" name="search">
                     Column: <select name="column">
                         <option value="code">code</option>

@@ -36,12 +36,11 @@ body {
     color: #fff;
     background-color: #CC6600;
     font-size: 0.9em;
-
     cursor: pointer;
     padding:6px;
     width: auto;
     border-radius: 10%;
-    margin: 9px;
+    margin: 0 9px;
 }
 
 .btn-area {
@@ -55,9 +54,9 @@ body {
     padding: 0.5em;
 }
 
-.searchButtons{
+.formsearch{
     display: flex;
-    align-items: baseline;
+    align-items: center;
 }
 
 .outer-scontainer table {
