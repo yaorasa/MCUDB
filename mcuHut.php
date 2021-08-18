@@ -370,12 +370,17 @@ if (isset($_POST["import"])) {
             display: block;
         }
 
-        #header-fixed {
+        /* #header-fixed {
             position: fixed;
             top: 0px;
             display: none;
             background-color: white;
-        }
+        } */
+
+        .TF.sticky th {
+        /* override to position sticky headers underneath page header element */
+        top: 50px !important;
+    }
 
         td,
         th {
@@ -574,7 +579,7 @@ if (isset($_POST["import"])) {
         if (!empty($result)) {
 
         ?>
-            <table id='userTable'>
+            <table id='userTable' class="TF sticky">
                 <thead>
                     <tr>
                         <th>Hut name</th>
@@ -647,7 +652,8 @@ if (isset($_POST["import"])) {
                     ?>
                     </tbody>
             </table>
-            <table id="header-fixed"></table>
+            <!-- fixed header 1st attempt -->
+            <!-- <table id="header-fixed"></table>
             <script>
                 var tableOffset = $("#userTable").offset().top;
                 var $header = $("#userTable > thead").clone();
@@ -664,7 +670,7 @@ if (isset($_POST["import"])) {
                         $fixedHeader.hide();
                     }
                 });
-            </script>
+            </script> -->
 
         <?php
 
