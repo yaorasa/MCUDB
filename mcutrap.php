@@ -433,13 +433,8 @@ if (isset($_POST["import"])) {
     <link rel="stylesheet" href="./mcustyle.css">
     <style>
         
-        .logo-image img {
-            width: 46px;
-            height: 46px;
-            border-radius: 5%;
-            overflow: hidden;
-            margin-top: -6px;
-        }
+       
+    
     </style>
     <script type="text/javascript">
         $(document).ready(function() {
@@ -504,7 +499,7 @@ if (isset($_POST["import"])) {
 
 
 <body>
-    <div class="navbar sticky">
+    <nav class="navbar sticky">
         <a class="navbar-brand" href="http://localhost/MCU/mcuDB/mcutrap.php">
             <div class="logo-image">
                 <img src="./img/MCU_logo.jpg" class="img-fluid">
@@ -521,7 +516,7 @@ if (isset($_POST["import"])) {
                 <a href="http://localhost/MCU/mcuDB/mcutrapset.php">Setup Traps</a>
             </div>
         </div>
-    </div>
+    </nav>
 
     <!-- <h2>Trap inventory</h2> -->
     
@@ -579,12 +574,12 @@ if (isset($_POST["import"])) {
                         <option value="note">note</option>
 
                     </select>
-                    <button type="submit" id="btnsearch" name="btnsearch" class="btn-search">Search</button>
+                    <button type="submit" id="btnsearch" name="btnsearch" class="btn-search"><img src="./img/searchWhite.svg"></button>
                     <button type="submit" value="" id="btnreset" name="btnreset" class="btn-submit">See All</button>
                 </form>
 
                 <!-- link to download -->
-                <a href="#" class="export" onclick="download_table_as_csv('userTable');">Download as CSV</a>
+                <a href="#" class="export" onclick="download_table_as_csv('userTable');"><img src="./img/downloadWhite.svg"> CSV</a>
             </div>
         </div>
 

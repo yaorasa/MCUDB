@@ -291,124 +291,11 @@ if (isset($_POST["import"])) {
 
 <head>
     <script src="jquery-3.2.1.min.js"></script>
-
+    <link rel="stylesheet" href="./mcustyle.css">
 
 
     <style>
-        body {
-            font-family: Arial;
-            width: 95%;
-        }
-
-        .outer-scontainer {
-            background: #F0F0F0;
-            border: #e0dfdf 1px solid;
-            padding: 20px;
-            border-radius: 2px;
-        }
-
-        .input-row {
-            margin-top: 0px;
-            margin-bottom: 20px;
-        }
-
-        .btn-submit {
-            background: white;
-            border: #EF8D21 1px solid;
-            color: #333;
-            font-size: 0.9em;
-            width: 100px;
-            border-radius: 2px;
-            cursor: pointer;
-        }
-
-        .btn-search {
-            border: 1px solid #333;
-            color: #000;
-            background-color: #ddd;
-            font-size: 0.9em;
-            width: 100px;
-            border-radius: 2px;
-            cursor: pointer;
-        }
-
-        .outer-scontainer table {
-            border-collapse: collapse;
-            /* width: 180%; */
-        }
-
-        .outer-scontainer th {
-            border: 1px solid #dddddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        .outer-scontainer td {
-            border: 1px solid #dddddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        #response {
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 2px;
-            display: none;
-        }
-
-        .success {
-            background: #c7efd9;
-            border: #bbe2cd 1px solid;
-        }
-
-        .error {
-            background: #fbcfcf;
-            border: #f3c6c7 1px solid;
-        }
-
-        div#response.display-block {
-            display: block;
-        }
-
-        /* #header-fixed {
-            position: fixed;
-            top: 0px;
-            display: none;
-            background-color: white;
-        } */
-
-        .TF.sticky th {
-        /* override to position sticky headers underneath page header element */
-        top: 50px !important;
-    }
-
-        td,
-        th {
-            word-wrap: break-word;
-        }
-
-        a.export,
-        a.export:visited {
-            display: inline-block;
-            text-decoration: none;
-            background: #EF8D21;
-            border: #CC6600 1px solid;
-            color: black;
-
-            padding: 8px;
-            /* margin-left: 300px; */
-        }
-
-        .searchExportEmail {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-
-        .searchExportEmail p {
-            margin: 5px;
-        }
+        
     </style>
     <script type="text/javascript">
         $(document).ready(function() {
@@ -471,9 +358,24 @@ if (isset($_POST["import"])) {
 </head>
 
 <body>
-    <h2>MCU huts inventory</h2>
-
-
+<nav class="navbar sticky">
+        <a class="navbar-brand" href="http://localhost/MCU/mcuDB/mcuhut.php">
+            <div class="logo-image">
+                <img src="./img/MCU_logo.jpg" class="img-fluid">
+            </div>
+        </a>
+        <p id="mainNav">MCU Inventory : Huts</p>
+        <a href="http://localhost/MCU/mcuDB/mcuhut.php">Huts</a>
+        <a href="http://localhost/MCU/mcuDB/mcutrap.php">Traps</a>
+        <div class="dropdown">
+            <button class="dropbtn">Setup
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+                <a href="http://localhost/MCU/mcuDB/mcutrapset.php">Setup Traps</a>
+            </div>
+        </div>
+    </nav>
 
     <div id="response" class="
     <?php if (!empty($type)) {

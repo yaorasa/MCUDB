@@ -50,7 +50,7 @@ if (isset($_POST["import"])) {
             if (isset($column[7])) {
                 $meshType = mysqli_real_escape_string($conn, $column[7]);
             }
-            $slideOut="";
+            $slideOut = "";
             if (isset($column[8])) {
                 $meshType = mysqli_real_escape_string($conn, $column[8]);
             }
@@ -105,7 +105,7 @@ if (isset($_POST["import"])) {
 
             $existedTraps = $db->select("SELECT code FROM mcuTrap where lower(code) = lower(trim('$code'))");
             // $existedArea = $db->select("SELECT area FROM mcuTrap where lower(trim(area)) = lower(trim('$area'))");
-            
+
             if ($existedTraps != null) {
                 $inOrUp = "update";
                 // if ($existedArea == null && $area != null) {
@@ -115,38 +115,38 @@ if (isset($_POST["import"])) {
                 $inOrUp = "insert";
             }
             switch ($inOrUp) {
-                // case "updateAll": {
-                //         $sqlUpdate = "UPDATE mcuTrap SET  area = ?,line=?
-                // boxLength = ?, entrance = ?, meshType =?, slideout=?, end = ?, internalBaffle = ?, weight = ?, design =?,
-                // lidSecurity = ?, rebar = ?, pinkTri =?  boxCondi = ?, note =?, photo = ?, datereported = ?, 
-                // volName = ? where code = ?";
-                //         $paramType = "sssssssssssssssssss";
-                //         $paramArray = array(
+                    // case "updateAll": {
+                    //         $sqlUpdate = "UPDATE mcuTrap SET  area = ?,line=?
+                    // boxLength = ?, entrance = ?, meshType =?, slideout=?, end = ?, internalBaffle = ?, weight = ?, design =?,
+                    // lidSecurity = ?, rebar = ?, pinkTri =?  boxCondi = ?, note =?, photo = ?, datereported = ?, 
+                    // volName = ? where code = ?";
+                    //         $paramType = "sssssssssssssssssss";
+                    //         $paramArray = array(
 
-                //             $area,
-                //             $line,
-                //             $boxLength,
-                //             $entrance,
-                //             $meshType,
-                //             $slideout,
-                //             $end,
-                //             $internalBaffle,
-                //             $weight,
-                //             $design,
-                //             $lidSecurity,
-                //             $rebar,
-                //             $pinkTri,
-                //             $boxCondi,
-                //             $note,
-                //             $photo,
-                //             $datereported,
-                //             $volName,
-                            
-                //             $code
-                //         );
-                //         $insertId = $db->update($sqlUpdate, $paramType, $paramArray);
-                //     }
-                //     break;
+                    //             $area,
+                    //             $line,
+                    //             $boxLength,
+                    //             $entrance,
+                    //             $meshType,
+                    //             $slideout,
+                    //             $end,
+                    //             $internalBaffle,
+                    //             $weight,
+                    //             $design,
+                    //             $lidSecurity,
+                    //             $rebar,
+                    //             $pinkTri,
+                    //             $boxCondi,
+                    //             $note,
+                    //             $photo,
+                    //             $datereported,
+                    //             $volName,
+
+                    //             $code
+                    //         );
+                    //         $insertId = $db->update($sqlUpdate, $paramType, $paramArray);
+                    //     }
+                    //     break;
                 case "update": {
                         $sqlUpdate = "UPDATE mcuTrap SET  
                 boxLength = ?, entrance = ?, meshType =?, slideout=?, end = ?, internalBaffle = ?, weight = ?, design =?,
@@ -154,7 +154,7 @@ if (isset($_POST["import"])) {
                 volName = ? where code = ?";
                         $paramType = "sssssssssssssssss";
                         $paramArray = array(
-                            
+
                             $boxLength,
                             $entrance,
                             $meshType,
@@ -229,124 +229,9 @@ if (isset($_POST["import"])) {
 
 <head>
     <script src="jquery-3.2.1.min.js"></script>
-
+    <link rel="stylesheet" href="./mcustyle.css">
     <style>
-        body {
-            font-family: Arial;
-            /* width: 95%; */
-        }
 
-        .outer-scontainer {
-            background: #F0F0F0;
-            border: #e0dfdf 1px solid;
-            padding: 20px;
-            border-radius: 2px;
-        }
-
-        .input-row {
-            margin-top: 0px;
-            margin-bottom: 20px;
-        }
-
-        .btn-submit {
-            background: white;
-            border: #EF8D21 1px solid;
-            color: #333;
-            font-size: 0.9em;
-            width: 100px;
-            border-radius: 2px;
-            cursor: pointer;
-        }
-
-        .btn-search {
-            border: 1px solid #333;
-            color: #000;
-            background-color: #ddd;
-            font-size: 0.9em;
-            width: 100px;
-            border-radius: 2px;
-            cursor: pointer;
-        }
-
-        .btn-area {
-            background: #333;
-            border: #EF8D21 1px solid;
-            color: white;
-            font-size: 1.1em;
-            width: 200px;
-            border-radius: 2px;
-            cursor: pointer;
-            padding: 0.5em;
-        }
-
-        .outer-scontainer table {
-            border-collapse: collapse;
-            /* width: 180%; */
-        }
-
-        .outer-scontainer th {
-            border: 1px solid #dddddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        .outer-scontainer td {
-            border: 1px solid #dddddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        #response {
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 2px;
-            display: none;
-        }
-
-        .success {
-            background: #c7efd9;
-            border: #bbe2cd 1px solid;
-        }
-
-        .error {
-            background: #fbcfcf;
-            border: #f3c6c7 1px solid;
-        }
-
-        div#response.display-block {
-            display: block;
-        }
-
-        #header-fixed {
-            position: fixed;
-            top: 0px;
-            display: none;
-            background-color: white;
-        }
-
-        td,
-        th {
-            word-wrap: break-word;
-            text-align: center;
-        }
-
-        a.export,
-        a.export:visited {
-            display: inline-block;
-            text-decoration: none;
-            background: #EF8D21;
-            border: #CC6600 1px solid;
-            color: black;
-
-            padding: 8px;
-            margin-left: 300px;
-        }
-
-        .searchExport {
-            display: flex;
-            justify-content: flex-start;
-            align-items: flex-start;
-        }
     </style>
     <script type="text/javascript">
         $(document).ready(function() {
@@ -410,8 +295,25 @@ if (isset($_POST["import"])) {
 
 
 <body>
-    <h2>MCU Traps inventory</h2>
-   
+    <nav class="navbar sticky">
+        <a class="navbar-brand" href="http://localhost/MCU/mcuDB/mcutrapset.php">
+            <div class="logo-image">
+                <img src="./img/MCU_logo.jpg" class="img-fluid">
+            </div>
+        </a>
+        <p id="mainNav">MCU Inventory : Traps Setting Up</p>
+        <a href="http://localhost/MCU/mcuDB/mcuhut.php">Huts</a>
+        <a href="http://localhost/MCU/mcuDB/mcutrap.php">Traps</a>
+        <div class="dropdown">
+            <button class="dropbtn">Setup
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+                <a href="http://localhost/MCU/mcuDB/mcutrapset.php">Setup Traps</a>
+            </div>
+        </div>
+    </nav>
+
     <div id="response" class="<?php if (!empty($type)) {
                                     echo $type . " display-block";
                                 } ?>">
@@ -531,7 +433,7 @@ if (isset($_POST["import"])) {
 
                 <tbody>
                     <tr>
-            
+
                         <td><?php echo $row['area']; ?></td>
                         <td><?php echo $row['line']; ?></td>
                         <td style="text-transform: uppercase;"><?php echo $row['code']; ?></td>
@@ -627,7 +529,7 @@ if (isset($_POST["import"])) {
                 '100px', '100px', '100px',
                 '100px', '70px', '150px',
                 '260px', '70px', '70px',
-                
+
             ],
             extensions: [{
                 name: 'sort'

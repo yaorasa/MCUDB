@@ -25,9 +25,11 @@ body {
     color: #333;
     font-size: 0.9em;
     width: 100px;
+    
     border-radius: 2px;
     cursor: pointer;
-    padding:6px;
+    padding:8px;
+    
 }
 
 .btn-search {
@@ -35,21 +37,28 @@ body {
     color: #fff;
     background-color: #CC6600;
     font-size: 0.9em;
-    width: 100px;
-    border-radius: 2px;
+
     cursor: pointer;
     padding:6px;
+    width: auto;
+    border-radius: 10%;
+    margin: 9px;
 }
 
 .btn-area {
     background: #333;
-    /* border: #EF8D21 1px solid; */
+    border: #333 1px solid;
     color: white;
-    font-size: 1.1em;
+    font-size: 1.0em;
     width: 200px;
-    border-radius: 2px;
+    border-radius: 4px;
     cursor: pointer;
     padding: 0.5em;
+}
+
+.searchButtons{
+    display: flex;
+    align-items: baseline;
 }
 
 .outer-scontainer table {
@@ -110,13 +119,23 @@ a.export:visited {
     color: #fff;
     padding: 10px;
     border-radius: 2px;
-}
+}   
 
 .searchExport {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: baseline;
     
+}
+.searchExportEmail {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.searchExportEmail p {
+    margin: 5px;
 }
 
 .navbar {
