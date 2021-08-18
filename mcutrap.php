@@ -518,12 +518,12 @@ if (isset($_POST["import"])) {
             display: block;
         }
 
-        #header-fixed {
+        /* #header-fixed {
             position: fixed;
             top: 0px;
             display: none;
             background-color: white;
-            /* word-wrap: break-word; */
+            /* word-wrap: break-word; 
             table-layout: fixed;
             width: 1800px;
 
@@ -534,7 +534,12 @@ if (isset($_POST["import"])) {
             border: 1px solid black;
             width: 100px;
             overflow: scroll;
-        }
+        } */
+
+        .TF.sticky th {
+        /* override to position sticky headers underneath page header element */
+        top: 0px !important;
+    }
 
         td,
         th {
@@ -711,7 +716,7 @@ if (isset($_POST["import"])) {
     if (!empty($result)) {
 
     ?>
-        <table id='userTable'>
+        <table id='userTable' class="TF sticky">
             <thead>
                 <tr>
                     <th>Area</th>
@@ -794,8 +799,8 @@ if (isset($_POST["import"])) {
                 ?>
                 </tbody>
         </table>
-
-        <table id="header-fixed"></table>
+<!-- fixed header attempt1  -->
+        <!-- <table id="header-fixed"></table>
         <script>
             var tableOffset = $("#userTable").offset().top;
             var $header = $("#userTable > thead").clone();
@@ -812,7 +817,7 @@ if (isset($_POST["import"])) {
                     $fixedHeader.hide();
                 }
             });
-        </script>
+        </script> -->
 
     <?php
 
@@ -825,7 +830,7 @@ if (isset($_POST["import"])) {
     <script src="tablefilter/tablefilter.js"></script>
 
 
-    <!-- starter filter -->
+    <!-- table filter -->
     <script data-config>
         var filtersConfig = {
             base_path: 'tablefilter/',
