@@ -717,7 +717,28 @@ if (isset($_POST["import"])) {
             col_7: 'select',
             col_8: 'select',
             col_9: 'select',
+            col_10: 'select',
             col_11: 'select',
+            col_12: 'select',
+            col_13: 'select',
+            col_14: 'checklist',
+            col_15: 'select',
+            // col_16: '',
+            col_17: 'select',
+            col_18: 'select',
+            col_19: 'select',
+            col_20: 'select',
+            col_21: 'select',
+            col_22: 'select',
+            col_23: 'select',
+            col_24: 'select',
+            col_25: 'select',
+            col_26: 'select',
+            col_27: 'select',
+            col_28: 'select',
+            col_29: 'select',
+            col_30: 'select',
+            
             alternate_rows: true,
             rows_counter: true,
             btn_reset: true,
@@ -732,23 +753,23 @@ if (isset($_POST["import"])) {
                 'string', 'string', 'string', 'string',
                 'string', 'string', 'string',
                 'string', 'string', 'string',
+                'string', 'string', 'string','string',
                 'string', 'string', 'string',
                 'string', 'string', 'string',
-                'string', 'string', 'string',
-                'string', 'string', 'string', 'string',
-                'string'
+                'string', 'string', 'string', 'string'
+                
             ],
             col_widths: [
                 '100px', '100px', '100px',
                 '100px', '100px', '100px',
                 '100px', '100px', '100px', '100px',
                 '100px', '100px', '100px',
-                '70px', '70px', '150px',
-                '260px', '100px', '100px',
+                '100px', '100px', '150px',
+                '260px', '100px', '100px','100px',
                 '100px', '100px', '100px',
                 '100px', '100px', '100px',
-                '100px', '100px', '100px', '100px',
-                '100px'
+                '100px', '100px', '100px', '100px'
+                
 
             ],
             extensions: [{

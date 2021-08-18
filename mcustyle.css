@@ -9,7 +9,7 @@ body {
     padding: 20px;
     border-radius: 2px;
     width: auto;
-    padding-top: 80px;
+    margin-top: 60px;
 }
 
 .input-row {
@@ -81,6 +81,7 @@ body {
     margin-bottom: 10px;
     border-radius: 2px;
     display: none;
+    margin-top: 80px;
 }
 
 .success {
