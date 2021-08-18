@@ -287,7 +287,7 @@ if (isset($_POST["import"])) {
 }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <script src="jquery-3.2.1.min.js"></script>
@@ -421,12 +421,12 @@ if (isset($_POST["import"])) {
                         <option value="photo">Photo</option>
                         <option value="note">Note</option>
                     </select>
-                    <button type="submit" id="btnsearch" name="btnsearch" class="btn-search">Search</button>
+                    <button type="submit" id="btnsearch" name="btnsearch" class="btn-search"><img src="./img/searchWhite.svg"></button>
                     <button type="submit" value="" id="btnreset" name="btnreset" class="btn-submit">See All</button>
                 </form>
                 <div>
                     <!-- link to download -->
-                    <a href="#" class="export" onclick="download_table_as_csv('userTable');">Download as CSV</a>
+                    <a href="#" class="export" onclick="download_table_as_csv('userTable');"><img src="./img/downloadWhite.svg"> CSV</a>
                 </div>
 
                 <!-- form to enter email -->
@@ -439,6 +439,7 @@ if (isset($_POST["import"])) {
             </div>
 
         </div>
+    </div>
 
         <!-- send email -->
         <!-- <?php
