@@ -599,8 +599,13 @@ if (isset($_POST["import"])) {
             col_5: 'select',
             col_6: 'select',
             col_7: 'select',
-            col_8: 'select',
+            
             col_9: 'select',
+            col_11: 'select',
+            col_13:'select',
+            // col_15:'select',
+            col_20: 'select',
+            col_25:'select',
             alternate_rows: true,
             rows_counter: true,
             btn_reset: true,
@@ -624,9 +629,9 @@ if (isset($_POST["import"])) {
                 '100px', '100px', '100px',
                 '100px', '100px', '300px', '100px',
                 '300px', '100px', '100px',
-                '100px', '300px', '100px',
-                '300px', '100px', '300px', '100px',
-                '100px', '100px', '100px',
+                '100px', '300px', '250px',
+                '300px', '200px', '300px', '200px',
+                '100px', '200px', '300px',
                 '300px', '100px', '100px'
                 
             ],
