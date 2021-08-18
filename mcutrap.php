@@ -430,7 +430,7 @@ if (isset($_POST["import"])) {
 
 <head>
     <script src="jquery-3.2.1.min.js"></script>
-
+    
     <style>
         body {
             font-family: Arial, Helvetica, sans-serif;
@@ -439,11 +439,12 @@ if (isset($_POST["import"])) {
         }
 
         .outer-scontainer {
-            background: #F0F0F0;
+            background: #FF9F21;
             border: #e0dfdf 1px solid;
             padding: 20px;
             border-radius: 2px;
             width: auto;
+            padding-top: 80px;
         }
 
         .input-row {
@@ -452,28 +453,31 @@ if (isset($_POST["import"])) {
         }
 
         .btn-submit {
-            background: white;
-            border: #EF8D21 1px solid;
+            background: #FF9F21;
+            border: #333 1px solid;
+            /* darker orange #CC6600*/
             color: #333;
             font-size: 0.9em;
             width: 100px;
             border-radius: 2px;
             cursor: pointer;
+            padding:6px;
         }
 
         .btn-search {
-            border: 1px solid #333;
-            color: #000;
-            background-color: #ddd;
+            border: 1px solid #CC6600;
+            color: #fff;
+            background-color: #CC6600;
             font-size: 0.9em;
             width: 100px;
             border-radius: 2px;
             cursor: pointer;
+            padding:6px;
         }
 
         .btn-area {
             background: #333;
-            border: #EF8D21 1px solid;
+            /* border: #EF8D21 1px solid; */
             color: white;
             font-size: 1.1em;
             width: 200px;
@@ -535,27 +539,27 @@ if (isset($_POST["import"])) {
         a.export:visited {
             display: inline-block;
             text-decoration: none;
-            background: #EF8D21;
+            background: #CC6600;
             border: #CC6600 1px solid;
-            color: black;
-
-            padding: 8px;
-            margin-left: 300px;
+            color: #fff;
+            padding: 10px;
+            border-radius: 2px;
         }
 
         .searchExport {
             display: flex;
-            justify-content: flex-start;
+            justify-content: space-between;
             align-items: flex-start;
+            
         }
 
         .navbar {
             display: grid;
-            grid-template-columns: 50px 1fr 100px 100px 100px;
+            grid-template-columns: 80px 1fr 100px 100px 100px;
             overflow: hidden;
             position: fixed;
             top: 0px !important;
-            background-color: #333;
+            background-color: #111;
             width: 100%;
         }
 
@@ -564,7 +568,7 @@ if (isset($_POST["import"])) {
             font-size: 16px;
             color: white;
             text-align: center;
-            padding: 14px 16px;
+            padding: 16px 16px;
             text-decoration: none;
         }
 
@@ -578,7 +582,7 @@ if (isset($_POST["import"])) {
             border: none;
             outline: none;
             color: white;
-            padding: 14px 16px;
+            padding: 16px 16px;
             background-color: inherit;
             font-family: inherit;
             margin: 0;
@@ -601,7 +605,7 @@ if (isset($_POST["import"])) {
         .dropdown-content a {
             float: none;
             color: black;
-            padding: 12px 16px;
+            padding: 5px;
             text-decoration: none;
             display: block;
             text-align: left;
@@ -619,19 +623,18 @@ if (isset($_POST["import"])) {
             text-align: left;
             color: white;
             font-size: 1.2em;
-
+            
             margin: 15px;
         }
 
-        h2 {
-            padding-top: 60px;
-            ;
-        }
+        /* h2 {
+            padding-top: 80px;   
+        } */
 
         .logo-image img {
             width: 46px;
             height: 46px;
-            border-radius: 50%;
+            border-radius: 5%;
             overflow: hidden;
             margin-top: -6px;
         }
@@ -693,18 +696,19 @@ if (isset($_POST["import"])) {
             link.click();
             document.body.removeChild(link);
         }
+
     </script>
 </head>
 
 
 <body>
     <div class="navbar sticky">
-        <a class="navbar-brand" href="/">
+        <a class="navbar-brand" href="http://localhost/MCU/mcuDB/mcutrap.php">
             <div class="logo-image">
-                <img src="https://static.wikia.nocookie.net/disney/images/6/69/Marvel_Cinematic_Universe_Logo.png/revision/latest?cb=20160729172402" class="img-fluid">
+                <img src="./img/MCU_logo.jpg" class="img-fluid">
             </div>
         </a>
-        <p id="mainNav">MCU Inventory</p>
+        <p id="mainNav">MCU Inventory : Traps</p>
         <a href="http://localhost/MCU/mcuDB/mcuhut.php">Huts</a>
         <a href="http://localhost/MCU/mcuDB/mcutrap.php">Traps</a>
         <div class="dropdown">
@@ -717,8 +721,8 @@ if (isset($_POST["import"])) {
         </div>
     </div>
 
-    <h2>Trap inventory</h2>
-
+    <!-- <h2>Trap inventory</h2> -->
+    
     <div id="response" class="
     <?php if (!empty($type)) {
         echo $type . " display-block";
