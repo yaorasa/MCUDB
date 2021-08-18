@@ -19,7 +19,7 @@ if (isset($_POST["import"])) {
         $file = fopen($fileName, "r");
         //condition to look at the file name -- > variable
         // if ($_FILES['file']['name'] = "Traps_maintenance - Sheet1")
-        if (str_contains($_FILES['file']['name'],"Traps_maintenance")) {
+        if (str_contains($_FILES['file']['name'], "Traps_maintenance")) {
             fgets($file);
             while (($column = fgetcsv($file, 10000, ",")) !== FALSE) {
 
@@ -426,14 +426,15 @@ if (isset($_POST["import"])) {
 }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <script src="jquery-3.2.1.min.js"></script>
 
     <style>
         body {
-            font-family: Arial;
+            font-family: Arial, Helvetica, sans-serif;
+            ;
             /* width: 95%; */
         }
 
@@ -442,6 +443,7 @@ if (isset($_POST["import"])) {
             border: #e0dfdf 1px solid;
             padding: 20px;
             border-radius: 2px;
+            width: auto;
         }
 
         .input-row {
@@ -518,28 +520,10 @@ if (isset($_POST["import"])) {
             display: block;
         }
 
-        /* #header-fixed {
-            position: fixed;
-            top: 0px;
-            display: none;
-            background-color: white;
-            /* word-wrap: break-word; 
-            table-layout: fixed;
-            width: 1800px;
-
-        }
-
-        #header-fixed td,
-        th {
-            border: 1px solid black;
-            width: 100px;
-            overflow: scroll;
-        } */
-
         .TF.sticky th {
-        /* override to position sticky headers underneath page header element */
-        top: 0px !important;
-    }
+            /* override to position sticky headers underneath page header element */
+            top: 50px !important;
+        }
 
         td,
         th {
@@ -563,6 +547,93 @@ if (isset($_POST["import"])) {
             display: flex;
             justify-content: flex-start;
             align-items: flex-start;
+        }
+
+        .navbar {
+            display: grid;
+            grid-template-columns: 50px 1fr 100px 100px 100px;
+            overflow: hidden;
+            position: fixed;
+            top: 0px !important;
+            background-color: #333;
+            width: 100%;
+        }
+
+        .navbar a {
+            float: left;
+            font-size: 16px;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        .dropdown {
+            float: left;
+            overflow: hidden;
+        }
+
+        .dropdown .dropbtn {
+            font-size: 16px;
+            border: none;
+            outline: none;
+            color: white;
+            padding: 14px 16px;
+            background-color: inherit;
+            font-family: inherit;
+            margin: 0;
+        }
+
+        .navbar a:hover,
+        .dropdown:hover .dropbtn {
+            color: #EF8D21;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            float: none;
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        #mainNav {
+            text-align: left;
+            color: white;
+            font-size: 1.2em;
+
+            margin: 15px;
+        }
+
+        h2 {
+            padding-top: 60px;
+            ;
+        }
+
+        .logo-image img {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-top: -6px;
         }
     </style>
     <script type="text/javascript">
@@ -627,11 +698,31 @@ if (isset($_POST["import"])) {
 
 
 <body>
-    <h2>MCU Traps inventory</h2>
+    <div class="navbar sticky">
+        <a class="navbar-brand" href="/">
+            <div class="logo-image">
+                <img src="https://static.wikia.nocookie.net/disney/images/6/69/Marvel_Cinematic_Universe_Logo.png/revision/latest?cb=20160729172402" class="img-fluid">
+            </div>
+        </a>
+        <p id="mainNav">MCU Inventory</p>
+        <a href="http://localhost/MCU/mcuDB/mcuhut.php">Huts</a>
+        <a href="http://localhost/MCU/mcuDB/mcutrap.php">Traps</a>
+        <div class="dropdown">
+            <button class="dropbtn">Setup
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+                <a href="http://localhost/MCU/mcuDB/mcutrapset.php">Setup Traps</a>
+            </div>
+        </div>
+    </div>
 
-    <div id="response" class="<?php if (!empty($type)) {
-                                    echo $type . " display-block";
-                                } ?>">
+    <h2>Trap inventory</h2>
+
+    <div id="response" class="
+    <?php if (!empty($type)) {
+        echo $type . " display-block";
+    } ?>">
         <?php if (!empty($message)) {
             echo $message;
         } ?>
@@ -799,25 +890,6 @@ if (isset($_POST["import"])) {
                 ?>
                 </tbody>
         </table>
-<!-- fixed header attempt1  -->
-        <!-- <table id="header-fixed"></table>
-        <script>
-            var tableOffset = $("#userTable").offset().top;
-            var $header = $("#userTable > thead").clone();
-            var $fixedHeader = $("#header-fixed").append($header);
-
-
-            $(window).bind("scroll", function() {
-                var offset = $(this).scrollTop();
-                // var offsethr = $(this).scrollLeft()
-
-                if (offset >= tableOffset && $fixedHeader.is(":hidden")) {
-                    $fixedHeader.show();
-                } else if (offset < tableOffset) {
-                    $fixedHeader.hide();
-                }
-            });
-        </script> -->
 
     <?php
 
