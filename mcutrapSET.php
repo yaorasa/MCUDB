@@ -231,7 +231,9 @@ if (isset($_POST["import"])) {
     <script src="jquery-3.2.1.min.js"></script>
     <link rel="stylesheet" href="./mcustyle.css">
     <style>
-
+        h2 {
+            margin-top: 20px;
+        }
     </style>
     <script type="text/javascript">
         $(document).ready(function() {
@@ -293,8 +295,9 @@ if (isset($_POST["import"])) {
     </script>
 </head>
 
-
 <body>
+    
+
     <nav class="navbar sticky">
         <a class="navbar-brand" href="http://localhost/MCU/mcuDB/mcutrapset.php">
             <div class="logo-image">
@@ -324,7 +327,7 @@ if (isset($_POST["import"])) {
     <div class="outer-scontainer">
         <div class="row">
 
-            <form class="form-horizontal" action="" method="post">
+            <!-- <form class="form-horizontal" action="" method="post">
                 <div class="searchExport">
                     <div class="input-row">
                         <button type="submit" value="Murchies" name="area1" class="btn-area">Murchies Area</button>
@@ -334,7 +337,10 @@ if (isset($_POST["import"])) {
                     </div>
 
                 </div>
-            </form>
+            </form> -->
+            <h2>This page is for setting up only. <br>
+        For full functionality please use <a href="http://localhost/MCU/mcuDB/mcutrap.php">
+            the traps page</a>.</h2>
 
             <form class="form-horizontal" action="" method="post" name="frmCSVImport" id="frmCSVImport" enctype="multipart/form-data">
                 <div class="input-row">
@@ -346,7 +352,7 @@ if (isset($_POST["import"])) {
                 </div>
 
             </form>
-            <div class="searchExport">
+            <!-- <div class="searchExport">
                 <form class="form-horizontal" action="" method="POST">
                     Search<input type="text" name="search">
                     Column: <select name="column">
@@ -372,8 +378,8 @@ if (isset($_POST["import"])) {
                 </form>
 
                 <!-- link to download -->
-                <a href="#" class="export" onclick="download_table_as_csv('userTable');">Download as CSV</a>
-            </div>
+            <!--<a href="#" class="export" onclick="download_table_as_csv('userTable');">Download as CSV</a>
+            </div> -->
         </div>
 
     </div>
@@ -385,13 +391,13 @@ if (isset($_POST["import"])) {
         $sqlSelect = "SELECT * FROM mcuTrap";
     }
 
-    if (isset($_POST['area1'])) {
-        $sqlSelect = "SELECT * FROM mcuTrap where area = 'Murchies'";
-    } else if (isset($_POST['area2'])) {
-        $sqlSelect = "SELECT * FROM mcuTrap where area = 'Clinton'";
-    } else if (isset($_POST['area3'])) {
-        $sqlSelect = "SELECT * FROM mcuTrap where area = 'Arthur'";
-    }
+    // if (isset($_POST['area1'])) {
+    //     $sqlSelect = "SELECT * FROM mcuTrap where area = 'Murchies'";
+    // } else if (isset($_POST['area2'])) {
+    //     $sqlSelect = "SELECT * FROM mcuTrap where area = 'Clinton'";
+    // } else if (isset($_POST['area3'])) {
+    //     $sqlSelect = "SELECT * FROM mcuTrap where area = 'Arthur'";
+    // }
 
 
 
